@@ -28,16 +28,11 @@ jobs:
   # Build job
   build:
     runs-on: ubuntu-latest
+    env:
+      process.env.MONGODB_URI: ${{secrets.MONGODB_URI}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        
-      - name: Make envfile
-        uses: SpicyPizza/create-envfile@v1
-        with:
-          envkey_MONGODB_URI: ${{secrets.MONGODB_URI}}
-          directory: './'
-          file_name: '.env.local'
       - name: Detect package manager
         id: detect-package-manager
         run: |
