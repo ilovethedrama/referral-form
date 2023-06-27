@@ -37,7 +37,7 @@ jobs:
         with:
           envkey_MONGODB_URI: ${{secrets.MONGODB_URI}}
           directory: './'
-          file_name: '.env'
+          file_name: '.env.local'
       - name: Detect package manager
         id: detect-package-manager
         run: |
