@@ -29,14 +29,8 @@ export default function ReferralForm() {
   const { register, handleSubmit } = useForm<IReferralFormInput>();
 
   const handleLeSubmit = async (data: IReferralFormInput) => {
-    console.log(
-      JSON.stringify({
-        ...data,
-      })
-    );
-
     try {
-      let response = await fetch("http://localhost:3000/api/postForm", {
+      let response = await fetch("/api/testing", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {
