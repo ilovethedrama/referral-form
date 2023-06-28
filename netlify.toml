@@ -6,7 +6,7 @@
   package = "@netlify/plugin-nextjs"
 
 [[redirects]]
-  from = "/*"
+  from = "/"
   to = "/server/app/index.html"
   status = 200
   force = false
