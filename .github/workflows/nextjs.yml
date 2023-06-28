@@ -35,7 +35,7 @@ jobs:
         run: |
           echo ${{ secrets.MONGODB_URI }}
           touch .env.local
-          echo MONGODB_URI={{ secrets.MONGODB_URI }} >> .env.local
+          echo MONGODB_URI=mongodb+srv://KYUKDB_Mena:STRAPNOTSTRALLY@kyukdb.4q2mr66.mongodb.net/?retryWrites=true&w=majority >> .env.local
       - name: Detect package manager
         id: detect-package-manager
         run: |
