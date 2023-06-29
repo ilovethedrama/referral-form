@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 // import Calendar from 'react-calendar';
@@ -26,6 +28,7 @@ type IReferralFormInput = {
 };
 
 export default function ReferralForm() {
+
   const { register, handleSubmit } = useForm<IReferralFormInput>();
 
   const handleLeSubmit = async (data: IReferralFormInput) => {
