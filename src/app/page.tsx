@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.description}>
-        <ReferralForm />
+        <h1>Welcome home!</h1>
       </div>
     </main>
   );

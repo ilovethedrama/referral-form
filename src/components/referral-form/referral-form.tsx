@@ -1,6 +1,5 @@
-"use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 // import Calendar from 'react-calendar';
 // import 'react-calendar/dist/Calendar.css';
