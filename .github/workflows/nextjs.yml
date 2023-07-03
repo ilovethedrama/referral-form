@@ -33,9 +33,9 @@ jobs:
         uses: actions/checkout@v3
       - name: create env file
         run: |
-          echo ${{ secrets.MONGODB_URI }}
+          echo ${{ secrets.NEXT_PUBLIC_MONGODB_URI }}
           touch .env.local
-          echo MONGODB_URI={{ secrets.MONGODB_URI }} >> .env.local
+          echo NEXT_PUBLIC_MONGODB_URI={{ secrets.NEXT_PUBLIC_MONGODB_URI }} >> .env.local
       - name: Detect package manager
         id: detect-package-manager
         run: |
