@@ -1,16 +1,16 @@
 import { MongoClient } from 'mongodb';
 
-if (!process.env.NEXT_PUBLIC_MONGODB_URI) {
-  throw new Error("Fam that 'NEXT_PUBLIC_MONGODB_URI' is mythical! It doesn't exist");
+if (!process.env.MONGODB_URI) {
+  throw new Error("Fam that 'MONGODB_URI' is mythical! It doesn't exist");
 }
 
-const uri = process.env.NEXT_PUBLIC_MONGODB_URI;
+const uri = process.env.MONGODB_URI;
 const options = {};
 
 let client;
 let clientPromise: Promise<MongoClient>;
 
-if (!process.env.NEXT_PUBLIC_MONGODB_URI) {
+if (!process.env.MONGODB_URI) {
   throw new Error('Please add the URI to your .env.local file');
 }
 
@@ -20,7 +20,7 @@ declare global {
   }
 }
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
   if (!global._mongoClientPromise) {
     client = new MongoClient(uri, options);
     global._mongoClientPromise = client.connect();
@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === 'development') {
   clientPromise = global._mongoClientPromise;
 } else {
   client = new MongoClient(uri, options);
-  console.log(client);
+  console.log('this is PRODUCTION, and the uri is:', uri);
   clientPromise = client.connect();
 }
 
