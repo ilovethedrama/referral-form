@@ -1,4 +1,5 @@
 import clientPromise from '@/lib/mongodb';
+import { NextResponse } from 'next/server';
 
 export async function POST(request:Request) {
       try {
@@ -6,7 +7,7 @@ export async function POST(request:Request) {
       const client = await clientPromise;
       const db = client.db('KYUK_Operations');
       const postForm = await db.collection('referrals').insertOne(body);
-      return new Response(JSON.stringify('vibe: litty'));
+      return NextResponse.json({ status: 201});
   } catch (error) {
     let message;
     if (error instanceof Error) message = error.message;
