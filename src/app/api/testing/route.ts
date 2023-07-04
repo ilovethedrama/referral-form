@@ -8,12 +8,13 @@ export async function POST(request:Request) {
       const db = client.db('KYUK_Operations');
       const postForm = await db.collection('referrals').insertOne(body);
       return NextResponse.json({ status: 201});
-  } catch (error) {
-    let message;
-    if (error instanceof Error) message = error.message;
-    else message = String(error);
-    console.error(message);
-    throw new Error(message);
+    } catch (error) {
+      let message;
+      if (error instanceof Error) message = error.message;
+      else message = String(error);
+      console.error(message);
+      // throw new Error(message);
+      return NextResponse.json({ error: `Ahh man something went wrong. Check this out:${message}`});
   }
   }
 
