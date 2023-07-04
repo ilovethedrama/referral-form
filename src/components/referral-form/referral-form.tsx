@@ -1,15 +1,6 @@
 
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-// import Calendar from 'react-calendar';
-// import 'react-calendar/dist/Calendar.css';
-// import Input from './input';
-// import styles from './referral-form.module.scss';
-// import Radio from './radio';
-// import RadioSelection from './radio-selection';
-// import { log } from 'console';
-// import { format } from 'date-fns';
-// import { Value } from 'react-calendar/dist/cjs/shared/types';
 
 type IReferralFormInput = {
   firstName: string;
@@ -40,7 +31,7 @@ export default function ReferralForm() {
           "Content-Type": "application/json",
         },
       });
-      response = await response.json();
+      await response.json();
     } catch (errorMessage: any) {
       console.log(errorMessage);
     }

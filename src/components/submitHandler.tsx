@@ -25,7 +25,7 @@ type IReferralFormInput = {
           "Content-Type": "application/json",
         },
       });
-      response = await response.json();
+      await response.json();
     } catch (errorMessage: any) {
       console.log(errorMessage);
     }
