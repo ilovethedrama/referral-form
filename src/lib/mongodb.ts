@@ -9,7 +9,7 @@ if (!process.env.DB_USER) {
   throw new Error("Fam that 'URI' is mythical, it's malformed due to the DB_USER! It doesn't exist");
 }
 
-if (process.env.DB_CLUSTER) {
+if (!process.env.DB_CLUSTER) {
   throw new Error(`Fam that 'URI' is mythical, it's malformed due to the DB_CLUSTER: ${process.env.DB_CLUSTER}! It (does)n't exist`);
 }
 
