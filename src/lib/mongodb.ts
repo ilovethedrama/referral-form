@@ -1,9 +1,9 @@
 import { MongoClient } from 'mongodb';
 
-const uri = `mongodb+srv://${process.env.CLUSTER_NAME}_${process.env.DB_USER}:${process.env.DB_PWD}@kyukdb.4q2mr66.mongodb.net/?retryWrites=true&w=majority`
+const uri = `mongodb+srv://${process.env.DB_CLUSTER}_${process.env.DB_USER}:${process.env.DB_PWD}@kyukdb.4q2mr66.mongodb.net/?retryWrites=true&w=majority`
 
-if (!process.env.CLUSTER_NAME) {
-  throw new Error("Fam that 'URI' is mythical, it's malformed due to the CLUSTER_NAME! It doesn't exist");
+if (!process.env.DB_CLUSTER) {
+  throw new Error("Fam that 'URI' is mythical, it's malformed due to the DB_CLUSTER! It doesn't exist");
 }
 if (!process.env.DB_USER) {
   throw new Error("Fam that 'URI' is mythical, it's malformed due to the DB_USER! It doesn't exist");
@@ -17,7 +17,7 @@ const options = {};
 let client;
 let clientPromise: Promise<MongoClient>;
 
-if (!process.env.CLUSTER_NAME || !process.env.DB_USER || !process.env.DB_PWD) {
+if (!process.env.DB_CLUSTER || !process.env.DB_USER || !process.env.DB_PWD) {
   throw new Error('Please add the URI to your .env.local file');
 }
 
