@@ -1,15 +1,16 @@
 import { MongoClient } from 'mongodb';
 
-const uri = `mongodb+srv://${process.env.DB_CLUSTER}_${process.env.DB_USER}:${process.env.DB_PWD}@kyukdb.4q2mr66.mongodb.net/?retryWrites=true&w=majority`
+const uri = `mongodb+srv://${process.env.DB_CLUSTER}${process.env.DB_USER}:${process.env.DB_PWD}@kyukdb.4q2mr66.mongodb.net/?retryWrites=true&w=majority`
 
 if (!process.env.DB_PWD) {
   throw new Error("Fam that 'URI' is mythical, it's malformed due to the DB_PWD! It doesn't exist");
 }
-if (process.env.DB_USER) {
-  throw new Error("Fam that 'URI' is mythical, it's malformed due to the DB_USER! It (does)n't exist");
+if (!process.env.DB_USER) {
+  throw new Error("Fam that 'URI' is mythical, it's malformed due to the DB_USER! It doesn't exist");
 }
-if (!process.env.DB_CLUSTER) {
-  throw new Error("Fam that 'URI' is mythical, it's malformed due to the DB_CLUSTER! It doesn't exist");
+
+if (process.env.DB_CLUSTER) {
+  throw new Error("Fam that 'URI' is mythical, it's malformed due to the DB_CLUSTER! It (does)n't exist");
 }
 
 
