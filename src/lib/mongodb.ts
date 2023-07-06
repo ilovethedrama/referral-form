@@ -1,16 +1,16 @@
 import { MongoClient } from 'mongodb';
 
-if (!process.env.MONGODB_URI) {
-  throw new Error("Fam that 'MONGODB_URI' is mythical! It doesn't exist");
+if (!process.env.DB_URI) {
+  throw new Error("Fam that 'DB_URI' is mythical! It doesn't exist");
 }
 
-const uri = process.env.MONGODB_URI;
+const uri = process.env.DB_URI;
 const options = {};
 
 let client;
 let clientPromise: Promise<MongoClient>;
 
-if (!process.env.MONGODB_URI) {
+if (!process.env.DB_URI) {
   throw new Error('Please add the URI to your .env.local file');
 }
 
