@@ -15,11 +15,11 @@ type IReferralFormInput = {
     reasonForReferral: string;
   };
   
-   export async function handleLeSubmit (formData: IReferralFormInput) {
+   export async function handleLeSubmit (data: IReferralFormInput) {
     try {
-      let response = await fetch("/api/testing", {
+      let response = await fetch(`${process.env.APP_HOST}/api/testing`, {
         method: "POST",
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
         headers: {
           Accept: "application/json, text/plain, */*",
           "Content-Type": "application/json",
