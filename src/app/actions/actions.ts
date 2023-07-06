@@ -1,10 +1,8 @@
 'use server'
 
-import { revalidatePath } from "next/cache";
-
 export const handleLeSubmit = async (data: FormData) => {
     try {
-      let response = await fetch("/api/testing", {
+      const response = await fetch("/api/testing", {
         method: "POST",
         body: JSON.stringify(data),
         headers: {

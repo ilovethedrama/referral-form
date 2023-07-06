@@ -1,5 +1,5 @@
 
-import { handleLeSubmit } from "@/app/actions/actions";
+import { handleLeSubmit } from "@/components/submitHandler";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -22,10 +22,14 @@ export default function ReferralForm() {
 
   const { register, handleSubmit } = useForm<IReferralFormInput>();
 
+  const onSubmit: SubmitHandler<IReferralFormInput> = (data) => {
+    handleLeSubmit(data);
+  };
+
   return (
     <div>
       <h1>KEE Youth UK Referral Form</h1>
-      <form action={handleLeSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <h2>Details of young person</h2>
           <label>First Name</label>
