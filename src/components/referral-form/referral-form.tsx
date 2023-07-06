@@ -1,4 +1,5 @@
 
+import { handleLeSubmit } from "@/app/actions/actions";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -21,30 +22,10 @@ export default function ReferralForm() {
 
   const { register, handleSubmit } = useForm<IReferralFormInput>();
 
-  const handleLeSubmit = async (data: IReferralFormInput) => {
-    try {
-      let response = await fetch("/api/testing", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-        },
-      });
-      await response.json();
-    } catch (errorMessage: any) {
-      console.log(errorMessage);
-    }
-  };
-
-  const onSubmit: SubmitHandler<IReferralFormInput> = (data) => {
-    handleLeSubmit(data);
-  };
-
   return (
     <div>
       <h1>KEE Youth UK Referral Form</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form action={handleLeSubmit}>
         <div>
           <h2>Details of young person</h2>
           <label>First Name</label>
