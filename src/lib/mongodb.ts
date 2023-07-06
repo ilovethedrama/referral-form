@@ -1,25 +1,16 @@
 import { MongoClient } from 'mongodb';
 
-const uri = `mongodb+srv://KYUKDB_Mena:${process.env.DB_PWD}@kyukdb.4q2mr66.mongodb.net/?retryWrites=true&w=majority`
-
-if (!process.env.DB_PWD) {
-  throw new Error("Fam that 'URI' is mythical, it's malformed due to the DB_PWD! It doesn't exist");
-}
-if (!process.env.DB_USER) {
-  throw new Error("Fam that 'URI' is mythical, it's malformed due to the DB_USER! It doesn't exist");
+if (!process.env.MONGODB_URI) {
+  throw new Error("Fam that 'MONGODB_URI' is mythical! It doesn't exist");
 }
 
-if (!process.env.DB_CLUSTER) {
-  throw new Error(`Fam that 'URI' is mythical, it's malformed due to the DB_CLUSTER: ${process.env.DB_CLUSTER}! It (does)n't exist`);
-}
-
-
+const uri = process.env.MONGODB_URI;
 const options = {};
 
 let client;
 let clientPromise: Promise<MongoClient>;
 
-if (!process.env.DB_CLUSTER || !process.env.DB_USER || !process.env.DB_PWD) {
+if (!process.env.MONGODB_URI) {
   throw new Error('Please add the URI to your .env.local file');
 }
 
@@ -29,7 +20,7 @@ declare global {
   }
 }
 
-if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+if (process.env.NODE_ENV === 'development') {
   if (!global._mongoClientPromise) {
     client = new MongoClient(uri, options);
     global._mongoClientPromise = client.connect();
@@ -37,7 +28,7 @@ if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
   clientPromise = global._mongoClientPromise;
 } else {
   client = new MongoClient(uri, options);
-  console.log('this is PRODUCTION, and the uri is:', uri);
+  console.log(client);
   clientPromise = client.connect();
 }
 
