@@ -15,11 +15,18 @@ type IReferralFormInput = {
   referrerFullName: string;
   referrerRelationshipType: string;
   reasonForReferral: string;
+  sendStatement: string;
+  sendStatementOther?: string;
+  lineOne?: string;
+  lineTwo?: string;
+  townOrCity?: string;
+  county?: string;
+  postCode?: string;
 };
 
 export default function ReferralForm() {
-  const { register, handleSubmit } = useForm<IReferralFormInput>();
-
+  const { register, handleSubmit, watch } = useForm<IReferralFormInput>();
+  const watchOptionalExtra = watch("sendStatement");
   const onSubmit: SubmitHandler<IReferralFormInput> = (data) => {
     postReferralForm(data);
   };
@@ -38,6 +45,40 @@ export default function ReferralForm() {
           <input {...register("email")} />
           <label>Contact Number</label>
           <input {...register("contactNumber")} />
+          <label>Does the person have a SEND statement:</label>
+          <label htmlFor="send-statement-yes">
+            <input
+              {...register("sendStatement")}
+              type="radio"
+              value="yes"
+              id="send-statement-yes"
+            />
+            Yes
+          </label>
+          <label htmlFor="send-statement-no">
+            <input
+              {...register("sendStatement")}
+              type="radio"
+              value="no"
+              id="send-statement-no"
+            />
+            No
+          </label>
+          <label htmlFor="send-statement-other">
+            <input
+              {...register("sendStatement")}
+              type="radio"
+              value="other"
+              id="send-statement-other"
+            />
+            Other
+          </label>
+          {watchOptionalExtra === "other" && (
+            <>
+              <label>Does the person have alternative assessments:</label>
+              <input {...register("sendStatementOther")} />
+            </>
+          )}
           <label>
             Gender:
             <select {...register("gender")}>
@@ -56,6 +97,18 @@ export default function ReferralForm() {
           <input {...register("referrerFullName")} />
           <label>Relationship to youth</label>
           <input {...register("referrerRelationshipType")} />
+        </div>
+        <div>
+          <label>Line 1</label>
+          <input {...register("lineOne")} />
+          <label>Line 2</label>
+          <input {...register("lineTwo")} />
+          <label>Town/City</label>
+          <input {...register("townOrCity")} />
+          <label>County</label>
+          <input {...register("county")} />
+          <label>Postcode</label>
+          <input {...register("postCode")} />
         </div>
         <input type="submit" value="submit" />
       </form>
