@@ -1,20 +1,15 @@
 "use server";
 
-type IReferralFormInput = {
-  firstName: string;
-  lastName: string;
-  title: string;
-  gender: string;
-  address: string;
-  contactNumber: string;
-  dateOfBirth: string;
-  email: string;
-  reasonForNEET: string;
-  referrerFullName: string;
-  referrerRelationshipType: string;
-  reasonForReferral: string;
-};
+import { IAddressForm, IReferralFormInput } from "@/types/formTypes";
 
+
+export async function postAddresssForm(data: IAddressForm) {
+  try {
+    console.log(data);
+  } catch (errorMessage: any) {
+    console.log(errorMessage);
+  }
+}
 export async function postReferralForm(data: IReferralFormInput) {
   try {
     let response = await fetch(`${process.env.APP_HOST}/api/testing`, {
@@ -34,7 +29,7 @@ export async function postReferralForm(data: IReferralFormInput) {
 export async function fetchProfile() {
   try {
     let response = await fetch(`${process.env.APP_HOST}/api/testing`, {
-      next: { revalidate: 0},
+      next: { revalidate: 0 },
       method: "GET",
       headers: {
         Accept: "application/json, text/plain, */*",

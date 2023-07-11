@@ -1,32 +1,13 @@
 import { postReferralForm } from "@/components/submitHandler";
+import { IReferralFormInput } from "@/types/formTypes";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-
-type IReferralFormInput = {
-  firstName: string;
-  lastName: string;
-  title: string;
-  gender: string;
-  address: string;
-  contactNumber: string;
-  dateOfBirth: string;
-  email: string;
-  reasonForNEET: string;
-  referrerFullName: string;
-  referrerRelationshipType: string;
-  reasonForReferral: string;
-  sendStatement: string;
-  sendStatementOther?: string;
-  lineOne?: string;
-  lineTwo?: string;
-  townOrCity?: string;
-  county?: string;
-  postCode?: string;
-};
+import AddressForm from "../address-form/address-form";
 
 export default function ReferralForm() {
   const { register, handleSubmit, watch } = useForm<IReferralFormInput>();
-  const watchOptionalExtra = watch("sendStatement");
+  const sendStatementStatus = watch('sendStatement');
+  const neetStatus = watch('neetStatus');
   const onSubmit: SubmitHandler<IReferralFormInput> = (data) => {
     postReferralForm(data);
   };
@@ -73,12 +54,43 @@ export default function ReferralForm() {
             />
             Other
           </label>
-          {watchOptionalExtra === "other" && (
+          {sendStatementStatus === 'other' && (
             <>
               <label>Does the person have alternative assessments:</label>
               <input {...register("sendStatementOther")} />
             </>
           )}
+          
+
+          <label>Is the young person NEET (Not in Employment, Education or Training):</label>
+          <label htmlFor="neet-status-no">
+            <input
+              {...register("neetStatus")}
+              type="radio"
+              value="no"
+              id="neet-status-no"
+            />
+            No
+          </label>
+          <label htmlFor="neet-status-yes">
+            <input
+              {...register("neetStatus")}
+              type="radio"
+              value="yes"
+              id="neet-status-yes"
+            />
+            Yes
+          </label> 
+          {
+            neetStatus === "yes" && (
+              <>
+              <AddressForm />
+              <label>Reason for NEET</label>
+              <input {...register("referrerRelationshipType")} />
+              </>
+            )
+          }
+
           <label>
             Gender:
             <select {...register("gender")}>
@@ -98,17 +110,17 @@ export default function ReferralForm() {
           <label>Relationship to youth</label>
           <input {...register("referrerRelationshipType")} />
         </div>
+        <AddressForm />
         <div>
-          <label>Line 1</label>
-          <input {...register("lineOne")} />
-          <label>Line 2</label>
-          <input {...register("lineTwo")} />
-          <label>Town/City</label>
-          <input {...register("townOrCity")} />
-          <label>County</label>
-          <input {...register("county")} />
-          <label>Postcode</label>
-          <input {...register("postCode")} />
+        <label htmlFor="referral-signature">
+            <input
+              {...register("referralSignature")}
+              type="text"
+              value="referralSignature"
+              id="referralSignature"
+            />
+            No
+          </label>
         </div>
         <input type="submit" value="submit" />
       </form>
