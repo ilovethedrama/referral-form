@@ -8,8 +8,8 @@ import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import { format } from "date-fns";
+import Select from "@mui/material/Select";
+
 export function InputComponent(props: any) {
   const { field } = useController(props);
   return (
@@ -53,8 +53,6 @@ export function RadioInputComponent(props: any) {
 
 export function DateInputComponent(props: any) {
   const { field } = useController(props);
-  console.log(field.value)
-
   return (
     <DatePicker
       onChange={field.onChange}

@@ -2,8 +2,6 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Providers from "./provider";
 import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import DateProvider from "./dateProvider";
 
 const inter = Inter({ subsets: ["latin"] });
