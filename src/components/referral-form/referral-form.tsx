@@ -2,125 +2,159 @@ import { postReferralForm } from "@/components/submitHandler";
 import { IReferralFormInput } from "@/types/formTypes";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import AddressForm from "../address-form/address-form";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import FormControl from "@mui/material/FormControl";
+
+import {
+  DateInputComponent,
+  DropdownComponent,
+  InputComponent,
+  RadioInputComponent,
+} from "../input";
+import InputLabel from "@mui/material/InputLabel";
 
 export default function ReferralForm() {
-  const { register, handleSubmit, watch } = useForm<IReferralFormInput>();
-  const sendStatementStatus = watch('sendStatement');
-  const neetStatus = watch('neetStatus');
+  const { handleSubmit, control, watch } = useForm<IReferralFormInput>();
+  const multiAgencySupportStatus = watch("multiAgencySupportStatus");
   const onSubmit: SubmitHandler<IReferralFormInput> = (data) => {
     postReferralForm(data);
+  };
+  const formFields = [
+    "first Name",
+    "lastName",
+    "email",
+    "contactNumber",
+    "referrerFirstName",
+    "referrerLastName",
+    "referrerRelationshipType",
+  ];
+
+  const agencyContactFields = [
+    "agencyFirstName",
+    "agencyLastName",
+    "agencyRole",
+    "agencyNumber",
+    "agencyEmail",
+  ];
+
+  const addressFields = [
+    "houseNumber",
+    "flatNumber",
+    "street",
+    "townOrCity",
+    "county",
+    "postCode",
+  ];
+  const radioList = {
+    title: "Does the person have a SEND statement:",
+    options: [
+      { name: "Yes", value: "yes" },
+      { name: "No", value: "no" },
+      { name: "Other", value: "other" },
+    ],
+  };
+  const isNeet = {
+    title:
+      "Is the young person NEET (Not in Employment, Education or Training):",
+    options: [
+      { name: "Yes", value: "yes" },
+      { name: "No", value: "no" },
+    ],
+  };
+
+  const hasMultiAgencySupport = {
+    title: `Does the young person has any involvement with professional agencies (e.g. mentors,
+        educational psychologists, young offending worker):`,
+    options: [
+      { name: "Yes", value: "yes" },
+      { name: "No", value: "no" },
+    ],
+  };
+
+  const genderList = {
+    options: [
+      { value: "female" },
+      { value: "male" },
+      { value: "non-binary" },
+      { value: "declineToState" },
+      { value: "other" },
+    ],
   };
 
   return (
     <div>
       <h1>KEE Youth UK Referral Form</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <h2>Details of young person</h2>
-          <label>First Name</label>
-          <input {...register("firstName")} />
-          <label>Last Name</label>
-          <input {...register("lastName")} />
-          <label>Email</label>
-          <input {...register("email")} />
-          <label>Contact Number</label>
-          <input {...register("contactNumber")} />
-          <label>Does the person have a SEND statement:</label>
-          <label htmlFor="send-statement-yes">
-            <input
-              {...register("sendStatement")}
-              type="radio"
-              value="yes"
-              id="send-statement-yes"
-            />
-            Yes
-          </label>
-          <label htmlFor="send-statement-no">
-            <input
-              {...register("sendStatement")}
-              type="radio"
-              value="no"
-              id="send-statement-no"
-            />
-            No
-          </label>
-          <label htmlFor="send-statement-other">
-            <input
-              {...register("sendStatement")}
-              type="radio"
-              value="other"
-              id="send-statement-other"
-            />
-            Other
-          </label>
-          {sendStatementStatus === 'other' && (
-            <>
-              <label>Does the person have alternative assessments:</label>
-              <input {...register("sendStatementOther")} />
-            </>
-          )}
-          
+        <h2>Details of young person</h2>
+        {formFields.map((field, index) => (
+          <InputComponent
+            key={`${field}_${control}`}
+            defaultValue=""
+            control={control}
+            name={field}
+            rules={{ required: true }}
+          />
+        ))}
 
-          <label>Is the young person NEET (Not in Employment, Education or Training):</label>
-          <label htmlFor="neet-status-no">
-            <input
-              {...register("neetStatus")}
-              type="radio"
-              value="no"
-              id="neet-status-no"
-            />
-            No
-          </label>
-          <label htmlFor="neet-status-yes">
-            <input
-              {...register("neetStatus")}
-              type="radio"
-              value="yes"
-              id="neet-status-yes"
-            />
-            Yes
-          </label> 
-          {
-            neetStatus === "yes" && (
-              <>
-              <AddressForm />
-              <label>Reason for NEET</label>
-              <input {...register("referrerRelationshipType")} />
-              </>
-            )
-          }
+        <RadioInputComponent
+          name="sendStatement"
+          defaultValue=""
+          control={control}
+          props={radioList}
+        />
 
-          <label>
-            Gender:
-            <select {...register("gender")}>
-              <option value="">Select a gender</option>
-              <option value="female">Female</option>
-              <option value="male">Male</option>
-              <option value="non-binary">Non-binary</option>
-              <option value="declineToState">Decline to state</option>
-              <option value="other">Prefer to self describe</option>
-            </select>
-          </label>
-        </div>
+        <RadioInputComponent
+          name="neetStatus"
+          defaultValue=""
+          control={control}
+          props={isNeet}
+        />
+
+        {addressFields.map((field, index) => (
+          <InputComponent
+            key={`${field}_${control}`}
+            defaultValue=""
+            control={control}
+            name={field}
+            rules={{ required: true }}
+          />
+        ))}
+        <DateInputComponent name="dateOfBirth"
+          defaultValue=""
+          control={control} />
+
+        <DropdownComponent
+          name="gender"
+          defaultValue=""
+          control={control}
+          props={genderList}
+        />
         <div>
           <h2>Details of person/professional making the referral</h2>
-          <label>Referrer&apos;s Full Name</label>
-          <input {...register("referrerFullName")} />
-          <label>Relationship to youth</label>
-          <input {...register("referrerRelationshipType")} />
         </div>
-        <AddressForm />
         <div>
-        <label htmlFor="referral-signature">
-            <input
-              {...register("referralSignature")}
-              type="text"
-              value="referralSignature"
-              id="referralSignature"
-            />
-            No
-          </label>
+          <h2>Multi-agency support</h2>
+
+          <RadioInputComponent
+            name="multiAgencySupportStatus"
+            defaultValue=""
+            control={control}
+            props={hasMultiAgencySupport}
+          />
+          {multiAgencySupportStatus === "Yes" && (
+            <>
+              {agencyContactFields.map((field, index) => (
+                <InputComponent
+                  key={`${field}_${control}`}
+                  defaultValue=""
+                  control={control}
+                  name={field}
+                  rules={{ required: true }}
+                />
+              ))}
+            </>
+          )}
         </div>
         <input type="submit" value="submit" />
       </form>

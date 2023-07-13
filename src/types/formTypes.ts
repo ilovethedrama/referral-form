@@ -15,6 +15,7 @@ export type IReferralFormInput = {
   referralSignature: string;
   sendStatement: string;
   sendStatementOther?: string;
+  multiAgencySupportStatus: string;
 };
 
 export type IAddressForm = {

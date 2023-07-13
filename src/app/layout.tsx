@@ -1,8 +1,10 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Providers from "./provider";
-import ThemeRegistry from '@/components/ThemeRegistry/ThemeRegistry';
-
+import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
+import DateProvider from "./dateProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +22,9 @@ export default function RootLayout({
     <html lang="en">
       <ThemeRegistry>
         <Providers>
-          <body className={inter.className}>{children}</body>
+          <DateProvider>
+            <body className={inter.className}>{children}</body>
+          </DateProvider>
         </Providers>
       </ThemeRegistry>
     </html>
