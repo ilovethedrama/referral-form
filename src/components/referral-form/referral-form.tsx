@@ -30,7 +30,7 @@ export default function ReferralForm() {
   const data = queryClient.getQueryData(["pizzaLord"]);
   const [step, setStep] = useState(1);
   const onSubmit: SubmitHandler<IReferralFormInput> = (data) => {
-   console.log(data);
+    postReferralForm(data);
   };
   return (
     <div className={styles.container}>
