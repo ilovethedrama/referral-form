@@ -1,6 +1,8 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Providers from "./provider";
+import ThemeRegistry from "@/components/ThemeRegistry/ThemeRegistry";
+import DateProvider from "./dateProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -15,10 +17,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-      <html lang="en">
+    <html lang="en">
+      <ThemeRegistry>
         <Providers>
-          <body className={inter.className}>{children}</body>
+          <DateProvider>
+            <body className={inter.className}>{children}</body>
+          </DateProvider>
         </Providers>
-      </html>
+      </ThemeRegistry>
+    </html>
   );
 }
