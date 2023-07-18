@@ -1,0 +1,11 @@
+.container {
+  h1 {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .form_container {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+  }
+}

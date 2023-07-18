@@ -1,0 +1,48 @@
+.container {
+  max-width: 600px;
+  grid-gap: 40px 10px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  // border: 3px solid orange;
+  .contactInfo {
+    max-width: 600px;
+    grid-gap: 40px 10px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    div:nth-child(3) {
+      flex: 1 1 100%;
+    }
+    > div {
+      display: flex;
+      flex: 1 1 45%;
+      
+      > div {
+        flex: 1 0 100%;
+      }
+    }
+  }
+  
+  .address {
+    display: flex;
+    grid-gap: 40px 10px;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    div:nth-child(3), div:nth-child(4), div:nth-child(5) {
+      flex: 1 1 100%;
+    }
+    div:nth-child(6) {
+      flex: 0 1 45%;
+      // border: 10px solid orange;
+    }
+    > div {
+      display: flex;
+      flex: 1 1 45%;
+
+      > div {
+        flex: 1 0 100%;
+      }
+    }
+  }
+}

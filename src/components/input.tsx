@@ -11,70 +11,92 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 
 export function InputComponent(props: any) {
-  const { field } = useController(props);
+  const { field, fieldState } = useController(props);
   return (
     <div>
       <TextField
-        id="filled-basic"
+        id={field.name}
         label={field.name}
         variant="filled"
         {...field}
         placeholder={props.name}
+        inputRef={field.ref}
+        helperText="useful help text"
       />
+      <p>
+        {fieldState.error && fieldState.isDirty
+          ? "Please check the info provided here"
+          : ""}
+      </p>
     </div>
   );
 }
 
 export function RadioInputComponent(props: any) {
-  const { field } = useController(props);
+  const { field, fieldState } = useController(props);
   return (
-    <FormControl>
-      <FormLabel id="demo-row-radio-buttons-group-label">
-        {props.props.title}
-      </FormLabel>
-      <RadioGroup
-        row
-        aria-labelledby="demo-row-radio-buttons-group-label"
-        {...field}
-      >
-        {...props.props.options.map(({ name, id }: any) => (
-          <FormControlLabel
-            key={name}
-            value={name}
-            control={<Radio />}
-            label={name}
-            id={id}
-          />
-        ))}
-      </RadioGroup>
-    </FormControl>
+    <>
+      <FormControl>
+        <FormLabel id={field.name}>
+          {props.props.title}
+        </FormLabel>
+        <RadioGroup
+          row
+          aria-labelledby="demo-row-radio-buttons-group-label"
+          {...field}
+        >
+          {...props.props.options.map(({ name, id }: any) => (
+            <FormControlLabel
+              key={name}
+              value={name}
+              control={<Radio />}
+              label={name}
+              id={id}
+              inputRef={field.ref}
+            />
+          ))}
+        </RadioGroup>
+      </FormControl>
+      <p>
+        {fieldState.error && fieldState.isDirty
+          ? "Please check the info provided here"
+          : ""}
+      </p>
+    </>
   );
 }
 
 export function DateInputComponent(props: any) {
   const { field } = useController(props);
   return (
-    <DatePicker
-      onChange={field.onChange}
-      value={new Date(field.value)}
-      label="Date of Birth"
-    />
+    <div style={{ height: "fitContent" }}>
+      <DatePicker
+        onChange={field.onChange}
+        value={new Date(field.value)}
+        label="Date of Birth"
+        inputRef={field.ref}
+      />
+    </div>
   );
 }
 
 export function DropdownComponent(props: any) {
   const { field } = useController(props);
   return (
-    <FormControl variant="filled" sx={{ m: 1, minWidth: 120 }}>
-      <InputLabel id="demo-simple-select-filled-label">Gender</InputLabel>
+    <FormControl
+      variant="filled"
+      sx={{ m: 1, minWidth: 120, height: "fit-content" }}
+    >
+      <InputLabel id={field.value}>Gender</InputLabel>
       <Select
         {...field}
-        labelId="demo-simple-select-filled-label"
-        id="demo-simple-select-filled"
+        labelId={field.value}
+        id={field.value}
         value={field.value}
         onChange={field.onChange}
+        inputRef={field.ref}
       >
-        <MenuItem value="">Select a gender</MenuItem>
+        <MenuItem value="Select a gender">Select a gender</MenuItem>
         <MenuItem value="female">Female</MenuItem>
         <MenuItem value="male">Male</MenuItem>
         <MenuItem value="non-binary">Non-binary</MenuItem>
