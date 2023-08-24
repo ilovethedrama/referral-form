@@ -4,7 +4,7 @@ import { fetchProfile } from "@/components/submitHandler";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Home() {
-  const { isLoading, isError, data, error } = useQuery({
+  const { isLoading, isError, data } = useQuery({
     queryKey: ["profile"],
     queryFn: fetchProfile,
   });

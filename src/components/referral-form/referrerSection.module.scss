@@ -1,5 +1,6 @@
 .container {
   max-width: 600px;
+  padding: 30px;
   grid-gap: 40px 10px;
   display: flex;
   flex-flow: row wrap;
@@ -16,7 +17,7 @@
     }
     > div {
       display: flex;
-      flex: 1 1 45%;
+      flex: 1 1 250px;
       
       > div {
         flex: 1 0 100%;

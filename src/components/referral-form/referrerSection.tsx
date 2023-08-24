@@ -1,27 +1,16 @@
 "use client";
 
 import React from "react";
-import {
-  InputComponent,
-  DateInputComponent,
-  DropdownComponent,
-  RadioInputComponent,
-} from "../input";
-import { IReferralFormInput } from "@/types/formTypes";
-import { Control } from "react-hook-form/dist/types";
+import { InputComponent, RadioInputComponent } from "../input";
 import styles from "./referrerSection.module.scss";
 
-interface Props {
-  step: number;
-  control: Control<IReferralFormInput, any>;
-}
-const ReferrerSection: React.FC<Props> = ({ step, control }) => {
+const ReferrerSection: React.FC = () => {
   const referrerContactInfo = [
-    "referrerFirstName",
-    "referrerLastName",
-    "referrerEmail",
-    "referrerContactNumber",
-    "referrerAgency",
+    "Referrer First Name",
+    "Referrer Last Name",
+    "Referrer Email",
+    "Referrer Contact Number",
+    "Referrer Agency",
   ];
 
   const referrerRelationshipType = {
@@ -32,10 +21,6 @@ const ReferrerSection: React.FC<Props> = ({ step, control }) => {
     ],
   };
 
-  if (step != 2) {
-    return null;
-  }
-
   return (
     <div className={styles.container}>
       <h2>Details of person/professional making the referral</h2>
@@ -44,17 +29,15 @@ const ReferrerSection: React.FC<Props> = ({ step, control }) => {
           <InputComponent
             key={field}
             defaultValue=""
-            control={control}
             name={field}
+            helperText={`Please enter a ${field.toLocaleLowerCase()}`}
             rules={{ required: true }}
           />
         ))}
       </div>
       <RadioInputComponent
         name="referrerRelationshipType"
-        defaultValue=""
-        control={control}
-        props={referrerRelationshipType}
+        radioDetails={referrerRelationshipType}
       />
     </div>
   );

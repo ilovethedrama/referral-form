@@ -1,24 +1,14 @@
 "use client";
 
 import React from "react";
-import {
-  InputComponent,
-  DateInputComponent,
-  DropdownComponent,
-  RadioInputComponent,
-} from "../input";
-import { IReferralFormInput } from "@/types/formTypes";
-import { Control } from "react-hook-form/dist/types";
+import { InputComponent, RadioInputComponent } from "../input";
+
 import styles from "./agencySection.module.scss";
 
 interface Props {
-  step: number;
-  control: Control<IReferralFormInput, any>;
   multiAgencySupportStatus: string;
 }
-const AgencySection: React.FC<Props> = ({ step, control, multiAgencySupportStatus }) => {
-
-
+const AgencySection: React.FC<Props> = ({ multiAgencySupportStatus }) => {
   const hasMultiAgencySupport = {
     title: `Does the young person has any involvement with professional agencies (e.g. mentors,
         educational psychologists, young offending worker):`,
@@ -36,10 +26,6 @@ const AgencySection: React.FC<Props> = ({ step, control, multiAgencySupportStatu
     "agencyEmail",
   ];
 
-  if (step != 3) {
-    return null;
-  }
-
   return (
     <div className={styles.container}>
       <h2>Multi-agency support</h2>
@@ -48,8 +34,7 @@ const AgencySection: React.FC<Props> = ({ step, control, multiAgencySupportStatu
         <RadioInputComponent
           name="multiAgencySupportStatus"
           defaultValue=""
-          control={control}
-          props={hasMultiAgencySupport}
+          radioDetails={hasMultiAgencySupport}
         />
         {multiAgencySupportStatus === "Yes" && (
           <>
@@ -57,8 +42,8 @@ const AgencySection: React.FC<Props> = ({ step, control, multiAgencySupportStatu
               <InputComponent
                 key={field}
                 defaultValue=""
-                control={control}
                 name={field}
+                helperText={"dynamic helper text"}
                 rules={{ required: true }}
               />
             ))}
