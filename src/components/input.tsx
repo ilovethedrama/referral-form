@@ -1,10 +1,5 @@
-import React, { useState, useEffect } from "react";
-import {
-  ControllerRenderProps,
-  FieldValues,
-  useController,
-  useFormContext,
-} from "react-hook-form";
+import React from "react";
+import { useController, useFormContext } from "react-hook-form";
 import { InputLabel, TextField } from "@material-ui/core";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
@@ -16,15 +11,13 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { FormHelperText } from "@mui/material";
 import styles from "./input.module.scss";
-import ctx from "../app/ReferralFormContext";
+import { parseISO } from "date-fns";
 
 export function InputComponent(props: any) {
   const { field, fieldState } = useController(props);
-  const {
-    trigger
-  } = useFormContext();
+  const { trigger, setValue } = useFormContext();
 
-  const reValidate = async () => {
+  const checkFieldValidity = async () => {
     if (field.value !== "") {
       const result = await trigger(field.name);
       return result;
@@ -32,61 +25,57 @@ export function InputComponent(props: any) {
   };
 
   return (
-    <div>
-      <TextField
-        {...field}
-        id={field.name}
-        label={field.name}
-        variant="filled"
-        inputRef={field.ref}
-        error={!!fieldState.error}
-        helperText={fieldState.error ? props.helperText : ""}
-        required={true}
-        onChangeCapture={reValidate}
-      />
-    </div>
+    <TextField
+      {...field}
+      id={field.name}
+      label={props.displayName}
+      variant="filled"
+      inputRef={field.ref}
+      error={!!fieldState.error}
+      helperText={fieldState.error ? props.helperText : ""}
+      required={true}
+      onChangeCapture={() => checkFieldValidity()}
+      onChange={(e) => {
+        setValue(field.name, e.target.value);
+      }}
+    />
   );
 }
 
 export function RadioInputComponent(props: any) {
-  const { radioIsValid } = React.useContext(ctx);
-  const [isOk, setIsOk] = useState(false);
   const {
     setError,
     trigger,
+    watch,
+    clearErrors,
     formState: { errors },
   } = useFormContext();
-  const { field } = useController(props);
+  const {
+    field,
+    fieldState: { error },
+  } = useController(props);
 
-  const reValidate = async (e: any) => {
-    console.log("doof");
-    if (e.target.value) {
-      checkFieldValidity();
-    }
-  };
+  const listenToRadio = watch(`${field.name}`);
 
   const setRadioError = () => {
     setError(field.name, { type: "required", message: "this is required" });
-    setIsOk(true);
   };
 
   const checkFieldValidity = async () => {
-    console.log("diff");
-    const legitFields = await trigger();
-    if (field.value === "" || legitFields) {
-      setRadioError();
+    const legitFields = await trigger(field.name);
+    if (field.value !== "" || legitFields) {
+      clearErrors(field.name);
       return;
     }
-    console.log(legitFields, field.value);
+    setRadioError();
   };
-
-  useEffect(() => {
-    checkFieldValidity();
-  }, [radioIsValid]);
 
   return (
     <>
-      <FormControl error={isOk} required={true}>
+      <FormControl
+        error={listenToRadio === "" && error !== undefined}
+        required={true}
+      >
         <FormLabel className={styles.formLabel} id={field.name}>
           {props.radioDetails.title}
         </FormLabel>
@@ -95,7 +84,8 @@ export function RadioInputComponent(props: any) {
           aria-labelledby="demo-row-radio-buttons-group-label"
           {...field}
           id={field.name}
-          onChangeCapture={(e) => reValidate(e)}
+          defaultValue={""}
+          onChangeCapture={() => checkFieldValidity()}
         >
           {...props.radioDetails.options.map(({ name }: any) => (
             <FormControlLabel
@@ -112,9 +102,7 @@ export function RadioInputComponent(props: any) {
           ))}
         </RadioGroup>
         {errors?.[field.name]?.message && (
-          <FormHelperText>
-            Here be errors {errors?.[field.name]?.message?.toString()}
-          </FormHelperText>
+          <FormHelperText>{props.displayName} is required</FormHelperText>
         )}
       </FormControl>
     </>
@@ -123,15 +111,23 @@ export function RadioInputComponent(props: any) {
 
 export function DateInputComponent(props: any) {
   const { field } = useController(props);
+  const {
+    formState: { errors },
+  } = useFormContext();
   return (
     <div style={{ height: "fitContent" }}>
       <DatePicker
         {...field}
         onChange={field.onChange}
-        value={new Date(field.value)}
+        value={parseISO(field.value)}
         label="Date of Birth"
-        inputRef={field.ref}
+        format="dd-MM-yyyy"
       />
+      {errors?.[field.name]?.message && (
+        <FormHelperText>
+          {errors?.[field.name]?.message?.toString()}
+        </FormHelperText>
+      )}
     </div>
   );
 }
@@ -149,12 +145,13 @@ export function DropdownComponent(props: any) {
         {...field}
         labelId={field.value}
         id={field.value}
+        label={field.value}
         value={field.value}
         onChange={field.onChange}
         inputRef={field.ref}
         required={true}
       >
-        <MenuItem value="Select a gender">Select a gender</MenuItem>
+        <MenuItem value="">Select a gender</MenuItem>
         <MenuItem value="female">Female</MenuItem>
         <MenuItem value="male">Male</MenuItem>
         <MenuItem value="non-binary">Non-binary</MenuItem>

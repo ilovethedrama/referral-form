@@ -12,6 +12,7 @@ const AgencySection: React.FC<Props> = ({ multiAgencySupportStatus }) => {
   const hasMultiAgencySupport = {
     title: `Does the young person has any involvement with professional agencies (e.g. mentors,
         educational psychologists, young offending worker):`,
+    displayName: "Agency support status",
     options: [
       { name: "Yes", value: "yes" },
       { name: "No", value: "no" },
@@ -33,8 +34,10 @@ const AgencySection: React.FC<Props> = ({ multiAgencySupportStatus }) => {
       <div className={styles.contactInfo}>
         <RadioInputComponent
           name="multiAgencySupportStatus"
+          key="multiAgencySupportStatus"
           defaultValue=""
           radioDetails={hasMultiAgencySupport}
+          displayName={hasMultiAgencySupport.displayName}
         />
         {multiAgencySupportStatus === "Yes" && (
           <>

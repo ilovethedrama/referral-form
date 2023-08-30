@@ -27,3 +27,8 @@ export type IAddressForm = {
   county?: string;
   postCode?: string;
 };
+
+export type IActiveStep = {
+  step: number,
+  isValid: boolean,
+}

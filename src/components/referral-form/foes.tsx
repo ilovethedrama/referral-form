@@ -1,5 +1,5 @@
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { SubmitHandler, useFormContext } from "react-hook-form";
 import { Stepper, Step, StepLabel, Button } from "@material-ui/core";
 import { IReferralFormInput } from "@/types/formTypes";
 import ReferrerSection from "./referrerSection";
@@ -8,8 +8,8 @@ import YoungPersonSection from "./youngPersonSection";
 import { useQueryClient } from "@tanstack/react-query";
 import styles from "./foes.module.scss";
 import ctx from "../../app/ReferralFormContext";
-
-const steps = ["Referrer Information", "Young Person Details", "Agency"]; // Replace these with your step labels
+import { postReferralForm } from "../submitHandler";
+import SummarySection from "./summarySection";
 
 interface Props {
   handleSubmit: any;
@@ -20,9 +20,10 @@ const FormStepperIo = (props: Props) => {
     watch,
     getValues,
     trigger,
-    formState: { errors },
+    reset,
+    formState: { errors, isSubmitted, isValid },
   } = useFormContext();
-  const { radioIsValid, setRadioIsValid } = React.useContext(ctx);
+  const { activeStep, setActiveStep, steps } = React.useContext(ctx);
 
   const multiAgencySupportStatus = watch("multiAgencySupportStatus");
   const sendStatementStatus = watch("sendStatement");
@@ -32,14 +33,25 @@ const FormStepperIo = (props: Props) => {
 
   const queryClient = useQueryClient();
 
+  const isObjectEmpty = (objectName: any) => {
+    return JSON.stringify(objectName) === "{}";
+  };
+
+  const filterEmptyValues = Object.keys(formValues)
+    .filter((k) => formValues[k] != null || "")
+    .reduce((a, k) => ({ ...a, [k]: formValues[k] }), {});
   queryClient.setQueryData(["pizzaLord"], () => {
-    return { ...formValues };
+    return { ...filterEmptyValues };
   });
 
   const data: any = queryClient.getQueryData(["pizzaLord"]);
-  const onSubmit = async (data: IReferralFormInput) => {
-    // const onSubmit: SubmitHandler<IReferralFormInput> = async (data) => {
-    // postReferralForm(data);
+  const onSubmit: SubmitHandler<IReferralFormInput> = async (data) => {
+    if (isObjectEmpty(data)) {
+      return;
+    }
+    postReferralForm(data);
+    const newActiveStep = 0;
+    setActiveStep({ step: newActiveStep, isValid: true });
     const isStepLegit = await trigger();
     if (isStepLegit && isLastStep) {
       const newActiveStep = activeStep.step + 1;
@@ -70,34 +82,18 @@ const FormStepperIo = (props: Props) => {
         return (
           <AgencySection multiAgencySupportStatus={multiAgencySupportStatus} />
         );
+      case 3:
+        return <SummarySection />;
       default:
-        return (
-          <div>
-            <p>Summary</p>
-            {getStuff().map((item) => {
-              return <p key={item}>{item}</p>;
-            })}
-          </div>
-        );
+        return <SummarySection />;
     }
   };
 
-  const [activeStep, setActiveStep] = React.useState({
-    step: 0,
-    isValid: false,
-  });
-
-  const isObjectEmpty = (objectName: any) => {
-    return JSON.stringify(objectName) === "{}";
-  };
-
   const handleNext = async () => {
-    //pass in an array of keys for each section to run trigger fn. on
     const isStepFilledWithLegitValues = await trigger();
-    setRadioIsValid(!radioIsValid);
-    console.log(errors);
     if (isObjectEmpty(errors) && isStepFilledWithLegitValues) {
-      const newActiveStep = activeStep.step + 1;
+      const newActiveStep =
+        activeStep.step < 4 ? activeStep.step + 1 : activeStep.step;
       setActiveStep({ step: newActiveStep, isValid: true });
       return;
     }
@@ -106,9 +102,14 @@ const FormStepperIo = (props: Props) => {
   const handleBack = async () => {
     const newActiveStep = activeStep.step - 1;
     setActiveStep({ step: newActiveStep, isValid: true });
+    const isStepFilledWithLegitValues = await trigger();
+    if (isObjectEmpty(errors) && isStepFilledWithLegitValues) {
+      console.log("teeeeeee");
+    }
   };
 
-  const isLastStep = activeStep.step === steps.length - 1;
+  const isLastStep = activeStep.step === 4;
+
   return (
     <form onSubmit={props.handleSubmit(onSubmit)}>
       <Stepper activeStep={activeStep.step} alternativeLabel>
@@ -130,8 +131,19 @@ const FormStepperIo = (props: Props) => {
             Back
           </Button>
 
-          <Button onClick={handleNext} sx={{ mr: 1 }}>
-            {isLastStep ? "Submit" : "Next"}{" "}
+          <Button
+            onClick={handleNext}
+            sx={{ mr: 1 }}
+            disabled={activeStep.step > 4}
+          >
+            Next
+          </Button>
+          <Button
+            type="submit"
+            sx={{ mr: 1 }}
+            disabled={activeStep.step < 3}
+          >
+            Submit
           </Button>
         </div>
       </div>

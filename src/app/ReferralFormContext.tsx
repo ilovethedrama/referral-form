@@ -1,18 +1,16 @@
+import { IActiveStep } from "@/types/formTypes";
 import { createContext } from "react";
-// types
 
 const ctx: CtxType = {
-  setRadioIsValid: () => {},
-  setNextClick: () => {},
-  nextClick: null,
-  radioIsValid: false, 
+  activeStep: { step: 0, isValid: false },
+  setActiveStep: () => {},
+  steps: [],
 };
 
 export interface CtxType {
-  setNextClick: Function;
-  nextClick: null | boolean;
-  radioIsValid: boolean;
-  setRadioIsValid: Function;
+  activeStep: IActiveStep;
+  setActiveStep: Function;
+  steps: string[];
 }
 
 const ReferralContext = createContext(ctx);

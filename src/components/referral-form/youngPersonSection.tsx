@@ -18,10 +18,10 @@ const YoungPersonSection: React.FC<Props> = ({
   neetStatus,
 }) => {
   const referralContactInfo = [
-    "First Name",
-    "Last Name",
-    "Email",
-    "Contact Number",
+    { key: "First Name", value: "referralFirstName" },
+    { key: "Last Name", value: "referralLastName" },
+    { key: "Email", value: "referralEmail" },
+    { key: "Contact Number", value: "referralContactNumber" },
   ];
   const genderList = {
     options: [
@@ -34,6 +34,7 @@ const YoungPersonSection: React.FC<Props> = ({
   };
   const radioList = {
     title: "Does the person have a SEND statement:",
+    displayName: "SEND statement status",
     options: [
       { name: "Yes", value: "yes" },
       { name: "No", value: "no" },
@@ -43,6 +44,7 @@ const YoungPersonSection: React.FC<Props> = ({
   const isNeet = {
     title:
       "Is the young person NEET (Not in Employment, Education or Training):",
+    displayName: "NEET status",
     options: [
       { name: "Yes", value: "yes" },
       { name: "No", value: "no" },
@@ -55,26 +57,33 @@ const YoungPersonSection: React.FC<Props> = ({
       <div className={styles.contactInfo}>
         {referralContactInfo.map((field, index) => (
           <InputComponent
-            key={field}
+            key={field.value}
             defaultValue=""
-            name={field}
+            name={field.value}
             rules={{ required: true }}
-            helperText={`Please enter the young person's ${field.toLocaleLowerCase()}`}
+            helperText={`Please enter the young person's ${field.key.toLocaleLowerCase()}`}
+            displayName={field.key}
           />
         ))}
         <DateInputComponent
-          name="dateOfBirth"
+          name="referralDateOfBirth"
           defaultValue=""
+          key={"dateOfBirth"}
           helperText={`Please enter the young person's date of birth`}
         />
-
-        <DropdownComponent name="gender" defaultValue="" props={genderList} />
+        <DropdownComponent
+          name="referralGender"
+          defaultValue=""
+          key={"referralGender"}
+          props={genderList}
+        />
       </div>
-
       <RadioInputComponent
         name="sendStatement"
         defaultValue=""
         radioDetails={radioList}
+        key={"sendStatement"}
+        displayName={radioList.displayName}
       />
       {sendStatementStatus === "Other" && (
         <>
@@ -83,6 +92,8 @@ const YoungPersonSection: React.FC<Props> = ({
             defaultValue=""
             name="sendStatementAlternative"
             rules={{ required: true }}
+            helperText={`Please enter the young person's`}
+            displayName={""}
           />
         </>
       )}
@@ -90,15 +101,21 @@ const YoungPersonSection: React.FC<Props> = ({
         name="neetStatus"
         defaultValue=""
         radioDetails={isNeet}
+        key={"neetStatus"}
+        displayName={isNeet.displayName}
       />
 
       <>
-        {neetStatus === "Yes" && (
-          <InputComponent
-            defaultValue=""
-            name="Reason for neet"
-            rules={{ required: true }}
-          />
+        {neetStatus === "No" && (
+          <>
+            <p>Please add details of institution/training program:</p>
+            <InputComponent
+              defaultValue=""
+              name="reasonForNEET"
+              helperText={`Please enter the young person's `}
+              displayName={"Reason for NEET"}
+            />
+          </>
         )}
       </>
     </div>

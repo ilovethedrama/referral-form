@@ -6,12 +6,25 @@ import ReferralContext from "./ReferralFormContext";
 
 export default function Providers({ children }: any) {
   const [queryClient] = React.useState(() => new QueryClient());
-  const [nextClick, setNextClick] = React.useState(null);
-  const [radioIsValid, setRadioIsValid] = React.useState(false);
+  const [activeStep, setActiveStep] = React.useState({
+    step: 0,
+    isValid: false,
+  });
+
+  const steps = [
+    "Referrer Information",
+    "Young Person Details",
+    "Agency",
+    "Summary",
+  ];
 
   const referralProviderValue = React.useMemo(
-    () => ({ nextClick, setNextClick, radioIsValid, setRadioIsValid }),
-    [nextClick, setNextClick, radioIsValid, setRadioIsValid]
+    () => ({
+      activeStep,
+      setActiveStep,
+      steps,
+    }),
+    [activeStep, setActiveStep]
   );
 
   return (
