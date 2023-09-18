@@ -52,7 +52,7 @@ const FormStepperIo = (props: Props) => {
     if (isObjectEmpty(data)) {
       return;
     }
-    postReferralForm(data);
+    // postReferralForm(data);
     const newActiveStep = 0;
     setActiveStep({ step: newActiveStep, isValid: true });
     const isStepLegit = await trigger();
