@@ -1,3 +1,49 @@
 .formLabel {
   text-align: left;
 }
+
+p .MuiFormHelperText-root .Mui-error {
+  margin: 5px 0;
+}
+
+.container {
+  display: flex;
+  flex-flow: column;
+}
+
+.checkboxContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-flow: row;
+  border: 1px solid;
+  height: 200px;
+  width: 600px;
+}
+
+.radioGroupContainer {
+  max-width: 600px; 
+  width: 100%;
+}
+
+.outerContainer {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  max-width: 600px;
+  width: 100%;
+}
+
+.checkboxGroupContainer {
+  display: flex;
+  flex-flow: row;
+}
+
+.signatureButtonContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.signatureButtonContainer button {
+  margin: 0;
+}

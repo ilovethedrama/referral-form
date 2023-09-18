@@ -15,7 +15,7 @@ export default function Providers({ children }: any) {
     "Referrer Information",
     "Young Person Details",
     "Agency",
-    "Summary",
+    "Confirmation",
   ];
 
   const referralProviderValue = React.useMemo(

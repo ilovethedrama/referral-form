@@ -1,26 +1,28 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useController, useFormContext } from "react-hook-form";
-import { InputLabel, TextField } from "@material-ui/core";
+import { Button, Checkbox, FormGroup, TextField } from "@material-ui/core";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
-import { FormHelperText } from "@mui/material";
+import { Autocomplete, FormHelperText } from "@mui/material";
 import styles from "./input.module.scss";
 import { parseISO } from "date-fns";
+import { DropDownLabel } from "@/types/formTypes";
+import SignaturePad from "react-signature-pad-wrapper";
+import Image from "next/image";
 
 export function InputComponent(props: any) {
   const { field, fieldState } = useController(props);
-  const { trigger, setValue } = useFormContext();
+  const { trigger, clearErrors } = useFormContext();
 
   const checkFieldValidity = async () => {
-    if (field.value !== "") {
-      const result = await trigger(field.name);
-      return result;
+    const legitFields = await trigger(field.name);
+    if (field.value !== "" || legitFields) {
+      clearErrors(field.name);
+      return;
     }
   };
 
@@ -35,9 +37,6 @@ export function InputComponent(props: any) {
       helperText={fieldState.error ? props.helperText : ""}
       required={true}
       onChangeCapture={() => checkFieldValidity()}
-      onChange={(e) => {
-        setValue(field.name, e.target.value);
-      }}
     />
   );
 }
@@ -71,41 +70,40 @@ export function RadioInputComponent(props: any) {
   };
 
   return (
-    <>
-      <FormControl
-        error={listenToRadio === "" && error !== undefined}
-        required={true}
+    <FormControl
+      className={styles.radioGroupContainer}
+      error={listenToRadio === "" && error !== undefined}
+      required={true}
+    >
+      <FormLabel className={styles.formLabel} id={field.name}>
+        {props.radioDetails.title}
+      </FormLabel>
+      <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        {...field}
+        id={field.name}
+        defaultValue={""}
+        onChangeCapture={() => checkFieldValidity()}
       >
-        <FormLabel className={styles.formLabel} id={field.name}>
-          {props.radioDetails.title}
-        </FormLabel>
-        <RadioGroup
-          row
-          aria-labelledby="demo-row-radio-buttons-group-label"
-          {...field}
-          id={field.name}
-          defaultValue={""}
-          onChangeCapture={() => checkFieldValidity()}
-        >
-          {...props.radioDetails.options.map(({ name }: any) => (
-            <FormControlLabel
-              {...field}
-              key={`${props.radioDetails.title}_${name}`}
-              value={name}
-              control={<Radio />}
-              label={name}
-              required={true}
-              id={name}
-              inputRef={field.ref}
-              defaultValue={name}
-            />
-          ))}
-        </RadioGroup>
-        {errors?.[field.name]?.message && (
-          <FormHelperText>{props.displayName} is required</FormHelperText>
-        )}
-      </FormControl>
-    </>
+        {...props.radioDetails.options.map(({ name }: any) => (
+          <FormControlLabel
+            {...field}
+            key={`${props.radioDetails.title}_${name}`}
+            value={name}
+            control={<Radio />}
+            label={name}
+            required={true}
+            id={name}
+            inputRef={field.ref}
+            defaultValue={name}
+          />
+        ))}
+      </RadioGroup>
+      {errors?.[field.name]?.message && !field.value && (
+        <FormHelperText>{props.displayName} is required</FormHelperText>
+      )}
+    </FormControl>
   );
 }
 
@@ -113,20 +111,35 @@ export function DateInputComponent(props: any) {
   const { field } = useController(props);
   const {
     formState: { errors },
+    trigger,
+    clearErrors,
+    setValue,
   } = useFormContext();
+
+  const checkFieldValidity = async (value: Date | null) => {
+    setValue(props.name, value);
+
+    const legitFields = await trigger(field.name);
+    if (field.value || legitFields) {
+      clearErrors(field.name);
+      return;
+    }
+  };
+
   return (
-    <div style={{ height: "fitContent" }}>
+    <div style={{ height: "fitContent" }} className={styles.container}>
       <DatePicker
         {...field}
-        onChange={field.onChange}
+        onChange={(value, otherstuff) => {
+          setValue(props.name, value);
+          checkFieldValidity(value);
+        }}
         value={parseISO(field.value)}
         label="Date of Birth"
         format="dd-MM-yyyy"
       />
-      {errors?.[field.name]?.message && (
-        <FormHelperText>
-          {errors?.[field.name]?.message?.toString()}
-        </FormHelperText>
+      {errors?.[field.name]?.message && !field.value && (
+        <FormHelperText error>{props.helperText}</FormHelperText>
       )}
     </div>
   );
@@ -134,30 +147,174 @@ export function DateInputComponent(props: any) {
 
 export function DropdownComponent(props: any) {
   const { field } = useController(props);
+  const {
+    formState: { errors },
+    setValue,
+    trigger,
+    clearErrors,
+  } = useFormContext();
+
+  const checkFieldValidity = async () => {
+    const legitFields = await trigger(field.name);
+    if (field.value !== "" || legitFields) {
+      clearErrors(field.name);
+      return;
+    }
+  };
+
   return (
-    <FormControl
-      variant="filled"
-      sx={{ m: 1, minWidth: 120, height: "fit-content" }}
-      required
-    >
-      <InputLabel id={field.value}>Gender</InputLabel>
-      <Select
-        {...field}
-        labelId={field.value}
-        id={field.value}
-        label={field.value}
-        value={field.value}
-        onChange={field.onChange}
-        inputRef={field.ref}
-        required={true}
-      >
-        <MenuItem value="">Select a gender</MenuItem>
-        <MenuItem value="female">Female</MenuItem>
-        <MenuItem value="male">Male</MenuItem>
-        <MenuItem value="non-binary">Non-binary</MenuItem>
-        <MenuItem value="declineToState">Decline to state</MenuItem>
-        <MenuItem value="other">Prefer to self describe</MenuItem>
-      </Select>
+    <>
+      <Autocomplete
+        id="free-solo-demo"
+        freeSolo
+        options={props.dropdownDetails.options.map(
+          (option: DropDownLabel) => option.label
+        )}
+        onInputChange={(_, newPetInputValue) => {
+          checkFieldValidity();
+          setValue(props.name, newPetInputValue);
+        }}
+        isOptionEqualToValue={(option: any, value) => {
+          return option.toString() === value.toString();
+        }}
+        renderOption={(props, option: any) => (
+          <li {...props} key={option}>
+            {option}
+          </li>
+        )}
+        getOptionLabel={(option) => option.label ?? option}
+        renderInput={(params) => <TextField {...params} label="Gender" />}
+      />
+      {errors?.[field.name]?.message && !field.value && (
+        <FormHelperText error>{props.displayName} is required</FormHelperText>
+      )}
+    </>
+  );
+}
+
+export function CheckboxComponent(props: any) {
+  const { field } = useController(props);
+  const { setValue } = useFormContext();
+
+  const [marketingList, setMarketingList] = React.useState<Array<string>>([]);
+
+  const gimiTheLight = (e: any) => {
+    if (e.target.checked) {
+      console.log("item added is ", e.target.labels[0].textContent);
+      setMarketingList([e.target.labels[0].textContent, ...marketingList]);
+      setValue(field.name, [e.target.labels[0].textContent, ...marketingList]);
+      return;
+    }
+    if (e.target.checked === false) {
+      const newArray = marketingList.filter(
+        (item) => item !== e.target.labels[0].textContent
+      );
+      setMarketingList(newArray);
+      setValue(field.name, newArray);
+      return;
+    }
+  };
+
+  return (
+    <FormControl sx={{ maxWidth: 600, width: "100%" }}>
+      <FormLabel className={styles.formLabel} id={field.name}>
+        {props.checkboxDetails.title}
+      </FormLabel>
+      <FormGroup sx={{ flexFlow: "row" }}>
+        {...props.checkboxDetails.options.map(({ name }: any) => (
+          <FormControlLabel
+            key={name}
+            control={<Checkbox onChange={gimiTheLight} />}
+            label={name}
+            value={marketingList}
+          />
+        ))}
+      </FormGroup>
     </FormControl>
+  );
+}
+
+export function FormSignaturePad(props: any) {
+  const { field, fieldState } = useController(props);
+  const {
+    setValue,
+    trigger,
+    clearErrors,
+    setError,
+    formState: { errors },
+    resetField,
+  } = useFormContext();
+  const signaturePadRef = useRef<SignaturePad | null>(null);
+
+  const clearSignature = () => {
+    if (signaturePadRef.current) {
+      signaturePadRef.current.clear();
+    }
+    resetField(field.name);
+    console.log(field.value);
+  };
+
+  const saveSignature = () => {
+    checkFieldValidity();
+    if (signaturePadRef.current) {
+      const signatureDataUrl = signaturePadRef.current.toDataURL(
+        "image/jpeg",
+        1.0
+      );
+      // You can now send the signatureDataUrl to your server or use it as needed.
+      setValue(field.name, signatureDataUrl, { shouldDirty: true });
+    }
+  };
+  const checkFieldValidity = async () => {
+    console.log("called!");
+    const legitFields = await trigger(field.name);
+    console.log("legitFields?! :", legitFields);
+    console.log("field.value?! :", field.value);
+
+    if (field.value !== "" || legitFields) {
+      clearErrors(field.name);
+      return;
+    }
+    setError(field.name, { type: "required", message: "this is required" });
+  };
+
+  return (
+    <div className={styles.outerContainer}>
+      <FormLabel className={styles.formLabel} id={field.name}>
+        {props.signatureConfig.title}
+      </FormLabel>
+      {signaturePadRef.current && signaturePadRef.current.toDataURL() && (
+        <Image
+          width="300"
+          height="150"
+          src={signaturePadRef.current.toDataURL("image/jpeg", 1.0)}
+          alt=""
+        />
+      )}
+      <div className={styles.checkboxContainer}>
+        <SignaturePad
+          ref={signaturePadRef}
+          canvasProps={{ className: "signature-pad" }}
+          options={{
+            minWidth: 2,
+            maxWidth: 2,
+            penColor: "black",
+            backgroundColor: "white",
+          }}
+        />
+      </div>
+      <div className={styles.signatureButtonContainer}>
+        <Button sx={{ mr: 1 }} onClick={clearSignature}>
+          Clear
+        </Button>
+        <Button sx={{ mr: 1 }} onClick={saveSignature}>
+          Save
+        </Button>
+      </div>
+      {(errors?.[field.name]?.message && !field.value) ||
+        (!fieldState.isDirty && (
+          <FormHelperText error>{props.displayName} is required</FormHelperText>
+        ))}
+    </div>
   );
 }

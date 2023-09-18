@@ -47,7 +47,7 @@ const SummarySection: React.FC = () => {
               <TableCell component="th" scope="row">
                 {key}
               </TableCell>
-              <TableCell align="right">{value.toString()}</TableCell>
+              {/* <TableCell align="right">{value.toString()}</TableCell> */}
               {/* <TableCell align="right" onClick={showEditInput}>
                 {!display ? "Edit" : ""}
               </TableCell>

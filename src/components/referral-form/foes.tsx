@@ -10,6 +10,8 @@ import styles from "./foes.module.scss";
 import ctx from "../../app/ReferralFormContext";
 import { postReferralForm } from "../submitHandler";
 import SummarySection from "./summarySection";
+import { FormSignaturePad } from "../input";
+import ConfirmationSection from "./confirmationSection";
 
 interface Props {
   handleSubmit: any;
@@ -32,6 +34,7 @@ const FormStepperIo = (props: Props) => {
   const formValues = getValues();
 
   const queryClient = useQueryClient();
+  const isLastStep = activeStep.step === 4;
 
   const isObjectEmpty = (objectName: any) => {
     return JSON.stringify(objectName) === "{}";
@@ -59,13 +62,6 @@ const FormStepperIo = (props: Props) => {
     }
   };
 
-  const getStuff = () => {
-    const foney = Object.entries(data);
-    const outPut = foney.map((item) => {
-      return `${item[0]}: ${item[1]}`;
-    });
-    return outPut;
-  };
 
   const getStepContent = (step: number) => {
     switch (step) {
@@ -83,35 +79,73 @@ const FormStepperIo = (props: Props) => {
           <AgencySection multiAgencySupportStatus={multiAgencySupportStatus} />
         );
       case 3:
-        return <SummarySection />;
+        return <ConfirmationSection />;
       default:
         return <SummarySection />;
     }
   };
 
+  const Stage1 = [
+    "referrerFirstName",
+    "referrerLastName",
+    "referrerEmail",
+    "referrerContactNumber",
+    "referrerAgency",
+    "referrerRelationshipType",
+  ];
+
+  const Stage2 = [
+    "referralGender",
+    "referralFirstName",
+    "referralLastName",
+    "referralEmail",
+    "referralContactNumber",
+    "referralDateOfBirth",
+    "sendStatement",
+    "neetStatus",
+  ];
+
+  const Stage3 = [
+    "multiAgencySupportStatus",
+    "agencyFirstName",
+    "agencyLastName",
+    "agencyRole",
+    "agencyNumber",
+    "agencyEmail",
+  ];
+
+  const Stage4 = [
+    "referralSignature",
+    "marketingConsentStatus",
+    "dataStorageConsent",
+  ];
+
+  const stagesAll = [Stage1, Stage2, Stage3, Stage4];
+
   const handleNext = async () => {
-    const isStepFilledWithLegitValues = await trigger();
+    const isStepFilledWithLegitValues = await trigger(
+      stagesAll[activeStep.step]
+    );
     if (isObjectEmpty(errors) && isStepFilledWithLegitValues) {
       const newActiveStep =
         activeStep.step < 4 ? activeStep.step + 1 : activeStep.step;
       setActiveStep({ step: newActiveStep, isValid: true });
-      return;
     }
   };
 
   const handleBack = async () => {
     const newActiveStep = activeStep.step - 1;
     setActiveStep({ step: newActiveStep, isValid: true });
-    const isStepFilledWithLegitValues = await trigger();
-    if (isObjectEmpty(errors) && isStepFilledWithLegitValues) {
-      console.log("teeeeeee");
-    }
+    const isStepFilledWithLegitValues = await trigger(
+      stagesAll[activeStep.step - 1]
+    );
   };
 
-  const isLastStep = activeStep.step === 4;
-
   return (
-    <form onSubmit={props.handleSubmit(onSubmit)}>
+    <form
+      onSubmit={props.handleSubmit(onSubmit)}
+      className={styles.form_container}
+    >
       <Stepper activeStep={activeStep.step} alternativeLabel>
         {steps.map((label) => (
           <Step key={label}>
@@ -119,33 +153,28 @@ const FormStepperIo = (props: Props) => {
           </Step>
         ))}
       </Stepper>
-      <div className={styles.container}>
-        <div>
-          <div>{getStepContent(activeStep.step)}</div>
-          <Button
-            color="inherit"
-            disabled={activeStep.step === 0}
-            onClick={handleBack}
-            sx={{ mr: 1 }}
-          >
-            Back
-          </Button>
 
-          <Button
-            onClick={handleNext}
-            sx={{ mr: 1 }}
-            disabled={activeStep.step > 4}
-          >
+      {getStepContent(activeStep.step)}
+      <div className={styles.button_containerhoe}>
+        <Button
+          color="inherit"
+          disabled={activeStep.step === 0}
+          onClick={handleBack}
+          sx={{ mr: 1 }}
+        >
+          Back
+        </Button>
+
+        {activeStep.step < 3 && (
+          <Button onClick={handleNext} sx={{ mr: 1 }}>
             Next
           </Button>
-          <Button
-            type="submit"
-            sx={{ mr: 1 }}
-            disabled={activeStep.step < 3}
-          >
+        )}
+        {activeStep.step === 3 && isObjectEmpty(errors) && (
+          <Button type="submit" sx={{ mr: 1 }}>
             Submit
           </Button>
-        </div>
+        )}
       </div>
     </form>
   );

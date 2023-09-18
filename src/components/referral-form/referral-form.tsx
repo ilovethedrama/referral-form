@@ -7,6 +7,7 @@ import Link from "next/link";
 import styles from "./referral-form.module.scss";
 import FormStepperIo from "./foes";
 import ctx from "../../app/ReferralFormContext";
+import { Button } from "@mui/material";
 
 export default function ReferralForm() {
   const { activeStep, steps } = React.useContext(ctx);
@@ -14,7 +15,12 @@ export default function ReferralForm() {
     return yup.object().shape({
       stage: yup
         .string()
-        .oneOf(["Referrer Information", "Young Person Details", "Agency"]),
+        .oneOf([
+          "Referrer Information",
+          "Young Person Details",
+          "Agency",
+          "Confirmation",
+        ]),
       ...(stage === "Referrer Information" && {
         referrerFirstName: yup.string().required(),
         referrerLastName: yup.string().required(),
@@ -27,7 +33,7 @@ export default function ReferralForm() {
         referralGender: yup.string().required(),
         referralFirstName: yup.string().required(),
         referralLastName: yup.string().required(),
-        referralEmail: yup.string().required(),
+        referralEmail: yup.string().required().email(),
         referralContactNumber: yup.string().required(),
         referralDateOfBirth: yup.string().required(),
         sendStatement: yup.string().required(),
@@ -41,12 +47,17 @@ export default function ReferralForm() {
         agencyNumber: yup.string(),
         agencyEmail: yup.string(),
       }),
+      ...(stage === "Confirmation" && {
+        referralSignature: yup.string().required(),
+        marketingConsentStatus: yup.array(yup.string()),
+        dataStorageConsent: yup.string().required(),
+      }),
     });
   };
 
-  const formSchema = yup.lazy((value: { stage: string }) =>
-    dynamicFormObject(value.stage || steps[activeStep.step])
-  );
+  const formSchema = yup.lazy(() => {
+    return dynamicFormObject(steps[activeStep.step]);
+  });
 
   const methods = useForm({ resolver: yupResolver(formSchema) });
 
@@ -58,7 +69,9 @@ export default function ReferralForm() {
             Your referral was successfully sent, we&apos;ll aim to be in touch
             within the next 48hours and look forward to supporting you.
           </h1>
-          <Link href={"/"}>Back to the homepage</Link>
+          <Button href="/" variant="contained">
+            Back to the homepage
+          </Button>
         </>
       )}
       {methods.formState.isSubmitting && <p>Sending...</p>}

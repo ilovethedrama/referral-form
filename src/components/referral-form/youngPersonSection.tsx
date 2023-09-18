@@ -24,12 +24,13 @@ const YoungPersonSection: React.FC<Props> = ({
     { key: "Contact Number", value: "referralContactNumber" },
   ];
   const genderList = {
+    displayName: "Gender",
     options: [
-      { value: "female" },
-      { value: "male" },
-      { value: "non-binary" },
-      { value: "declineToState" },
-      { value: "other" },
+      { label: "Female", value: "female" },
+      { label: "Male", value: "male" },
+      { label: "Non-binary", value: "non-binary" },
+      { label: "Decline to State", value: "declineToState" },
+      { label: "Other", value: "other" },
     ],
   };
   const radioList = {
@@ -70,12 +71,13 @@ const YoungPersonSection: React.FC<Props> = ({
           defaultValue=""
           key={"dateOfBirth"}
           helperText={`Please enter the young person's date of birth`}
+          displayName={"Date of Birth"}
         />
         <DropdownComponent
           name="referralGender"
           defaultValue=""
-          key={"referralGender"}
-          props={genderList}
+          displayName={genderList.displayName}
+          dropdownDetails={genderList}
         />
       </div>
       <RadioInputComponent

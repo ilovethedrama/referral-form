@@ -1,7 +1,10 @@
 "use client";
 
 import React from "react";
-import { InputComponent, RadioInputComponent } from "../input";
+import {
+  InputComponent,
+  RadioInputComponent,
+} from "../input";
 
 import styles from "./agencySection.module.scss";
 
@@ -31,7 +34,6 @@ const AgencySection: React.FC<Props> = ({ multiAgencySupportStatus }) => {
     <div className={styles.container}>
       <h2>Multi-agency support</h2>
 
-      <div className={styles.contactInfo}>
         <RadioInputComponent
           name="multiAgencySupportStatus"
           key="multiAgencySupportStatus"
@@ -52,7 +54,6 @@ const AgencySection: React.FC<Props> = ({ multiAgencySupportStatus }) => {
             ))}
           </>
         )}
-      </div>
     </div>
   );
 };
