@@ -7,7 +7,7 @@ import {
   RadioInputComponent,
 } from "../input";
 
-import styles from "./ConfirmationSection.module.scss";
+import styles from "./confirmationSection.module.scss";
 
 const ConfirmationSection: React.FC = () => {
   const hasAgreedToDataStorage = {
