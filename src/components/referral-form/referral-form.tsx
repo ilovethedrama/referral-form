@@ -11,7 +11,10 @@ import { Button } from "@mui/material";
 
 export default function ReferralForm() {
   const { activeStep, steps } = React.useContext(ctx);
-  const dynamicFormObject = (stage: string) => {
+  const dynamicFormObject = (
+    stage: string,
+    multiAgencySupportStatus: string
+  ) => {
     return yup.object().shape({
       stage: yup
         .string()
@@ -41,11 +44,21 @@ export default function ReferralForm() {
       }),
       ...(stage === "Agency" && {
         multiAgencySupportStatus: yup.string().required(),
-        agencyFirstName: yup.string(),
-        agencyLastName: yup.string(),
-        agencyRole: yup.string(),
-        agencyNumber: yup.string(),
-        agencyEmail: yup.string(),
+        ...(multiAgencySupportStatus === "Yes"
+          ? {
+              agencyFirstName: yup.string().required(),
+              agencyLastName: yup.string().required(),
+              agencyRole: yup.string().required(),
+              agencyNumber: yup.string().required(),
+              agencyEmail: yup.string().required(),
+            }
+          : {
+              agencyFirstName: yup.string(),
+              agencyLastName: yup.string(),
+              agencyRole: yup.string(),
+              agencyNumber: yup.string(),
+              agencyEmail: yup.string(),
+            }),
       }),
       ...(stage === "Confirmation" && {
         referralSignature: yup.string().required(),
@@ -56,7 +69,7 @@ export default function ReferralForm() {
   };
 
   const formSchema = yup.lazy(() => {
-    return dynamicFormObject(steps[activeStep.step]);
+    return dynamicFormObject(steps[activeStep.step], "No");
   });
 
   const methods = useForm({ resolver: yupResolver(formSchema) });
@@ -64,15 +77,18 @@ export default function ReferralForm() {
   return (
     <div className={styles.container}>
       {methods.formState.isSubmitSuccessful && (
-        <>
+        <div className={styles.confirmationText}>
           <h1>
-            Your referral was successfully sent, we&apos;ll aim to be in touch
-            within the next 48hours and look forward to supporting you.
+            <strong>Your referral was successfully sent</strong>
           </h1>
+          <h2>
+            We&apos;ll aim to be in touch within the next 48hours and look
+            forward to supporting you.
+          </h2>
           <Button href="/" variant="contained">
             Back to the homepage
           </Button>
-        </>
+        </div>
       )}
       {methods.formState.isSubmitting && <p>Sending...</p>}
 

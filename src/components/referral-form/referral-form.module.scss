@@ -1,4 +1,9 @@
 .container {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
   h1 {
     text-align: center;
     padding: 40px 20px;
@@ -7,5 +12,23 @@
     display: flex;
     flex-flow: column;
     align-items: center;
+    justify-content: center;
+  }
+
+  .confirmationText {
+    display: flex;
+    flex-flow: column;
+    max-width: 800px;
+    text-align: center;
+
+    h1 {
+      margin: 0;
+      padding: 0;
+    }
+    
+    h2 {
+      padding: 40px 0;
+      max-width: 600px;
+    }
   }
 }

@@ -9,7 +9,7 @@ import FormLabel from "@mui/material/FormLabel";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Autocomplete, FormHelperText } from "@mui/material";
 import styles from "./input.module.scss";
-import { parseISO } from "date-fns";
+import { format, parseISO, sub } from "date-fns";
 import { DropDownLabel } from "@/types/formTypes";
 import SignaturePad from "react-signature-pad-wrapper";
 import Image from "next/image";
@@ -28,6 +28,7 @@ export function InputComponent(props: any) {
 
   return (
     <TextField
+      sx={{ width: "100%" }}
       {...field}
       id={field.name}
       label={props.displayName}
@@ -126,6 +127,10 @@ export function DateInputComponent(props: any) {
     }
   };
 
+  const elevenYearsAgoFromToday = sub(new Date(), {
+    years: 11,
+  });
+  console.log(field.value);
   return (
     <div style={{ height: "fitContent" }} className={styles.container}>
       <DatePicker
@@ -134,12 +139,18 @@ export function DateInputComponent(props: any) {
           setValue(props.name, value);
           checkFieldValidity(value);
         }}
-        value={parseISO(field.value)}
+        value={parseISO(new Date().toDateString())}
+        defaultValue={parseISO("2022-09-17")}
         label="Date of Birth"
         format="dd-MM-yyyy"
+        maxDate={elevenYearsAgoFromToday}
       />
-      {errors?.[field.name]?.message && !field.value && (
+      {errors?.[field.name]?.message && !field.value ? (
         <FormHelperText error>{props.helperText}</FormHelperText>
+      ) : (
+        <FormHelperText>
+          Referral must be at least 11 years old in age
+        </FormHelperText>
       )}
     </div>
   );
@@ -163,7 +174,7 @@ export function DropdownComponent(props: any) {
   };
 
   return (
-    <>
+    <div className={styles.container}>
       <Autocomplete
         id="free-solo-demo"
         freeSolo
@@ -188,7 +199,7 @@ export function DropdownComponent(props: any) {
       {errors?.[field.name]?.message && !field.value && (
         <FormHelperText error>{props.displayName} is required</FormHelperText>
       )}
-    </>
+    </div>
   );
 }
 
@@ -283,14 +294,14 @@ export function FormSignaturePad(props: any) {
       <FormLabel className={styles.formLabel} id={field.name}>
         {props.signatureConfig.title}
       </FormLabel>
-      {signaturePadRef.current && signaturePadRef.current.toDataURL() && (
+      {/* {signaturePadRef.current?.toDataURL() && (
         <Image
-          width="300"
-          height="150"
+          width="200"
+          height="100"
           src={signaturePadRef.current.toDataURL("image/jpeg", 1.0)}
-          alt=""
+          alt="signed digital signature"
         />
-      )}
+      )} */}
       <div className={styles.checkboxContainer}>
         <SignaturePad
           ref={signaturePadRef}

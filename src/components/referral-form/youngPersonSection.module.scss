@@ -10,6 +10,11 @@
   flex-flow: column;
   align-items: center;
   
+  .conditionalInputContainer {
+    max-width: 600px;
+    width: 100%;
+  }
+
   .contactInfo {
     max-width: 600px;
     grid-gap: 40px 10px;

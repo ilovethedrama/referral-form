@@ -23,6 +23,16 @@ const YoungPersonSection: React.FC<Props> = ({
     { key: "Email", value: "referralEmail" },
     { key: "Contact Number", value: "referralContactNumber" },
   ];
+
+  const youngPersonAddress = [
+    { key: "House Number", value: "youngPersonHouseNumber" },
+    { key: "Flat Number", value: "youngPersonFlatNumber" },
+    { key: "Street", value: "youngPersonStreet" },
+    { key: "Town or City", value: "youngPersonTownOrCity" },
+    { key: "County", value: "youngPersonCounty" },
+    { key: "Postcode", value: "youngPersonPostCode" },
+  ];
+
   const genderList = {
     displayName: "Gender",
     options: [
@@ -88,16 +98,15 @@ const YoungPersonSection: React.FC<Props> = ({
         displayName={radioList.displayName}
       />
       {sendStatementStatus === "Other" && (
-        <>
-          <p>If Other please explain:</p>
+        <div className={styles.conditionalInputContainer}>
           <InputComponent
             defaultValue=""
             name="sendStatementAlternative"
             rules={{ required: true }}
             helperText={`Please enter the young person's`}
-            displayName={""}
+            displayName={"If Other please explain:"}
           />
-        </>
+        </div>
       )}
       <RadioInputComponent
         name="neetStatus"
@@ -107,19 +116,16 @@ const YoungPersonSection: React.FC<Props> = ({
         displayName={isNeet.displayName}
       />
 
-      <>
-        {neetStatus === "No" && (
-          <>
-            <p>Please add details of institution/training program:</p>
-            <InputComponent
-              defaultValue=""
-              name="reasonForNEET"
-              helperText={`Please enter the young person's `}
-              displayName={"Reason for NEET"}
-            />
-          </>
-        )}
-      </>
+      {neetStatus === "No" && (
+        <div className={styles.conditionalInputContainer}>
+          <InputComponent
+            defaultValue=""
+            name="reasonForNEET"
+            helperText={`Please enter the young person's `}
+            displayName={"Please add details of institution/training program:"}
+          />
+        </div>
+      )}
     </div>
   );
 };
