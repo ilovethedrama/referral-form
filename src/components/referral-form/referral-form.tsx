@@ -31,6 +31,14 @@ export default function ReferralForm() {
         referrerContactNumber: yup.string().required(),
         referrerAgency: yup.string().required(),
         referrerRelationshipType: yup.string().required(),
+        referrerAddress: yup.object({
+          "House Number": yup.string(), 
+          "Flat Number": yup.string(), 
+          "Street": yup.string(), 
+          "Town or City": yup.string().required(), 
+          "County": yup.string(), 
+          "Postcode": yup.string().required(), 
+        })
       }),
       ...(stage === "Young Person Details" && {
         referralGender: yup.string().required(),

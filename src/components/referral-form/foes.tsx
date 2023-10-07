@@ -12,6 +12,7 @@ import { postReferralForm } from "../submitHandler";
 import SummarySection from "./summarySection";
 import { FormSignaturePad } from "../input";
 import ConfirmationSection from "./confirmationSection";
+import AddressFinder from "./addressFinder";
 
 interface Props {
   handleSubmit: any;
@@ -62,7 +63,6 @@ const FormStepperIo = (props: Props) => {
     }
   };
 
-
   const getStepContent = (step: number) => {
     switch (step) {
       case 0:
@@ -92,6 +92,8 @@ const FormStepperIo = (props: Props) => {
     "referrerContactNumber",
     "referrerAgency",
     "referrerRelationshipType",
+    "referrerAddress",
+    "searchPostcode"
   ];
 
   const Stage2 = [
@@ -153,7 +155,6 @@ const FormStepperIo = (props: Props) => {
           </Step>
         ))}
       </Stepper>
-
       {getStepContent(activeStep.step)}
       <div className={styles.button_containerhoe}>
         <Button

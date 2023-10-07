@@ -56,6 +56,7 @@ const ConfirmationSection: React.FC = () => {
           name="dataStorageConsent"
           key="dataStorageConsentStatus"
           radioDetails={hasAgreedToDataStorage}
+          defaultValue=""
           displayName={hasAgreedToDataStorage.displayName}
         />
       </div>

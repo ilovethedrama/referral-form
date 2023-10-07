@@ -24,15 +24,6 @@ const YoungPersonSection: React.FC<Props> = ({
     { key: "Contact Number", value: "referralContactNumber" },
   ];
 
-  const youngPersonAddress = [
-    { key: "House Number", value: "youngPersonHouseNumber" },
-    { key: "Flat Number", value: "youngPersonFlatNumber" },
-    { key: "Street", value: "youngPersonStreet" },
-    { key: "Town or City", value: "youngPersonTownOrCity" },
-    { key: "County", value: "youngPersonCounty" },
-    { key: "Postcode", value: "youngPersonPostCode" },
-  ];
-
   const genderList = {
     displayName: "Gender",
     options: [

@@ -3,6 +3,7 @@
 import React from "react";
 import { InputComponent, RadioInputComponent } from "../input";
 import styles from "./referrerSection.module.scss";
+import AddressFinder from "./addressFinder";
 
 const ReferrerSection: React.FC = () => {
   const referrerContactInfo = [
@@ -25,6 +26,8 @@ const ReferrerSection: React.FC = () => {
   return (
     <div className={styles.container}>
       <h2>Details of person/professional making the referral</h2>
+      <AddressFinder />
+
       <div className={styles.contactInfo}>
         {referrerContactInfo.map((field) => (
             <InputComponent

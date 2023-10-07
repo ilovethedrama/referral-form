@@ -17,7 +17,6 @@ import Image from "next/image";
 export function InputComponent(props: any) {
   const { field, fieldState } = useController(props);
   const { trigger, clearErrors } = useFormContext();
-
   const checkFieldValidity = async () => {
     const legitFields = await trigger(field.name);
     if (field.value !== "" || legitFields) {
@@ -130,7 +129,6 @@ export function DateInputComponent(props: any) {
   const elevenYearsAgoFromToday = sub(new Date(), {
     years: 11,
   });
-  console.log(field.value);
   return (
     <div style={{ height: "fitContent" }} className={styles.container}>
       <DatePicker
@@ -194,7 +192,75 @@ export function DropdownComponent(props: any) {
           </li>
         )}
         getOptionLabel={(option) => option.label ?? option}
-        renderInput={(params) => <TextField {...params} label="Gender" />}
+        renderInput={(params) => (
+          <TextField {...params} label={props.displayName} />
+        )}
+      />
+      {errors?.[field.name]?.message && !field.value && (
+        <FormHelperText error>{props.displayName} is required</FormHelperText>
+      )}
+    </div>
+  );
+}
+
+export function AddressDropdownComponent(props: any) {
+  const { field } = useController(props);
+  const {
+    formState: { errors },
+    setValue,
+    trigger,
+    clearErrors,
+  } = useFormContext();
+
+  const checkFieldValidity = async () => {
+    const legitFields = await trigger(field.name);
+    if (field.value !== "" || legitFields) {
+      clearErrors(field.name);
+      return;
+    }
+  };
+
+  return (
+    <div className={styles.container}>
+      <Autocomplete
+        id="free-solo-demo"
+        freeSolo
+        options={props.dropdownDetails.options.map((option: any) => {
+          // console.log(option.value);
+          return option.value.formattedAddress;
+        })}
+        onInputChange={(_, newPetInputValue) => {
+          checkFieldValidity();
+          const chosen = props.dropdownDetails.options.filter(
+            ({ value }: any) => {
+              return value.formattedAddress === newPetInputValue;
+            }
+          );
+          console.log(...chosen)
+          setValue(props.name, {
+            "House Number": chosen[0].value.HouseNumber,
+            "Flat Number": chosen[0].value.FlatNumber,
+            "Street": chosen[0].value.Street,
+            "Town or City": chosen[0].value.TownOrCity,
+            "County": chosen[0].value.County,
+            "Postcode": chosen[0].value.PostCode,
+          });
+
+        }}
+        isOptionEqualToValue={(option: any, value) => {
+          return option.toString() === value.toString();
+        }}
+        renderOption={(props, option: any) => (
+          <li {...props} key={option}>
+            {option}
+          </li>
+        )}
+        getOptionLabel={(option) => {
+          return option.formattedAddress ?? option;
+        }}
+        renderInput={(params) => (
+          <TextField {...params} label={props.displayName} />
+        )}
       />
       {errors?.[field.name]?.message && !field.value && (
         <FormHelperText error>{props.displayName} is required</FormHelperText>
@@ -211,7 +277,6 @@ export function CheckboxComponent(props: any) {
 
   const gimiTheLight = (e: any) => {
     if (e.target.checked) {
-      console.log("item added is ", e.target.labels[0].textContent);
       setMarketingList([e.target.labels[0].textContent, ...marketingList]);
       setValue(field.name, [e.target.labels[0].textContent, ...marketingList]);
       return;
@@ -222,7 +287,6 @@ export function CheckboxComponent(props: any) {
       );
       setMarketingList(newArray);
       setValue(field.name, newArray);
-      return;
     }
   };
 
@@ -262,7 +326,6 @@ export function FormSignaturePad(props: any) {
       signaturePadRef.current.clear();
     }
     resetField(field.name);
-    console.log(field.value);
   };
 
   const saveSignature = () => {
@@ -277,11 +340,7 @@ export function FormSignaturePad(props: any) {
     }
   };
   const checkFieldValidity = async () => {
-    console.log("called!");
     const legitFields = await trigger(field.name);
-    console.log("legitFields?! :", legitFields);
-    console.log("field.value?! :", field.value);
-
     if (field.value !== "" || legitFields) {
       clearErrors(field.name);
       return;
