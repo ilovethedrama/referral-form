@@ -23,9 +23,7 @@ const AgencySection: React.FC<Props> = ({ multiAgencySupportStatus }) => {
     { key: "Agency First Name", value: "agencyFirstName" },
     { key: "Agency Last Name", value: "agencyLastName" },
     { key: "Agency Email", value: "agencyEmail" },
-
-    
-    { key: "Agency Contact Number", value: "agencyNumber" },
+                         { key: "Agency Contact Number", value: "agencyNumber" },
     { key: "Agency Position", value: "agencyRole" },
   ];
 
