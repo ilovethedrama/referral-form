@@ -138,7 +138,11 @@ const FormStepperIo = (props: Props) => {
   const handleBack = async () => {
     const newActiveStep = activeStep.step - 1;
     setActiveStep({ step: newActiveStep, isValid: true });
-                       const isStepFilledWithLegitValues = await trigger(
+                       
+    
+    
+    
+    const isStepFilledWithLegitValues = await trigger(
       stagesAll[activeStep.step - 1]
     );
   };
