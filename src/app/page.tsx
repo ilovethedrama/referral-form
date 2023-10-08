@@ -11,7 +11,7 @@ export default function Home() {
       <div className={styles.description}>
         <h1>Welcome home!</h1>
         <h3>
-          <Link href={"/organisations/"}>Organisations and that</Link>
+          <Link href={"/organisations/"}>Organisations</Link>
         </h3>
         <h3>
           <Link href={"/parents/"}>Parents/Care-Givers</Link>
