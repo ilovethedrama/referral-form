@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div className={styles.description}>
-        <h1>Welcome home!</h1>
+        <h1>Welcome home tho!</h1>
         <h3>
           <Link href={"/organisations/"}>Organisations</Link>
         </h3>
