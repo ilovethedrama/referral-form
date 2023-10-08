@@ -11,10 +11,7 @@ import Paper from "@mui/material/Paper";
 import { useFormContext } from "react-hook-form";
 
 const SummarySection: React.FC = () => {
-
-  const {
-    getValues,
-  } = useFormContext();
+  const { getValues } = useFormContext();
 
   const formValues = getValues();
   const output = Object.entries(formValues).map(([key, value]) => ({

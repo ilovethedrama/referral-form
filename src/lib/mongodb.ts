@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient } from "mongodb";
 
 if (!process.env.DB_URI) {
   throw new Error("Fam that 'DB_URI' is mythical! It doesn't exist");
@@ -11,7 +11,7 @@ let client;
 let clientPromise: Promise<MongoClient>;
 
 if (!process.env.DB_URI) {
-  throw new Error('Please add the URI to your .env.local file');
+  throw new Error("Please add the URI to your .env.local file");
 }
 
 declare global {
@@ -20,7 +20,7 @@ declare global {
   }
 }
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === "development") {
   if (!global._mongoClientPromise) {
     client = new MongoClient(uri, options);
     global._mongoClientPromise = client.connect();

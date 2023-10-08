@@ -24,7 +24,7 @@ export default function Providers({ children }: any) {
       setActiveStep,
       steps,
     }),
-    [activeStep, setActiveStep]
+    [activeStep, setActiveStep],
   );
 
   return (

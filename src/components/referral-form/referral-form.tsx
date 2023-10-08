@@ -13,7 +13,7 @@ export default function ReferralForm() {
   const { activeStep, steps } = React.useContext(ctx);
   const dynamicFormObject = (
     stage: string,
-    multiAgencySupportStatus: string
+    multiAgencySupportStatus: string,
   ) => {
     return yup.object().shape({
       stage: yup
@@ -32,13 +32,13 @@ export default function ReferralForm() {
         referrerAgency: yup.string().required(),
         referrerRelationshipType: yup.string().required(),
         referrerAddress: yup.object({
-          "House Number": yup.string(), 
-          "Flat Number": yup.string(), 
-          "Street": yup.string(), 
-          "Town or City": yup.string().required(), 
-          "County": yup.string(), 
-          "Postcode": yup.string().required(), 
-        })
+          "House Number": yup.string(),
+          "Flat Number": yup.string(),
+          Street: yup.string(),
+          "Town or City": yup.string().required(),
+          County: yup.string(),
+          Postcode: yup.string().required(),
+        }),
       }),
       ...(stage === "Young Person Details" && {
         referralGender: yup.string().required(),

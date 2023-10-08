@@ -177,7 +177,7 @@ export function DropdownComponent(props: any) {
         id="free-solo-demo"
         freeSolo
         options={props.dropdownDetails.options.map(
-          (option: DropDownLabel) => option.label
+          (option: DropDownLabel) => option.label,
         )}
         onInputChange={(_, newPetInputValue) => {
           checkFieldValidity();
@@ -234,18 +234,17 @@ export function AddressDropdownComponent(props: any) {
           const chosen = props.dropdownDetails.options.filter(
             ({ value }: any) => {
               return value.formattedAddress === newPetInputValue;
-            }
+            },
           );
-          console.log(...chosen)
+          console.log(...chosen);
           setValue(props.name, {
             "House Number": chosen[0].value.HouseNumber,
             "Flat Number": chosen[0].value.FlatNumber,
-            "Street": chosen[0].value.Street,
+            Street: chosen[0].value.Street,
             "Town or City": chosen[0].value.TownOrCity,
-            "County": chosen[0].value.County,
-            "Postcode": chosen[0].value.PostCode,
+            County: chosen[0].value.County,
+            Postcode: chosen[0].value.PostCode,
           });
-
         }}
         isOptionEqualToValue={(option: any, value) => {
           return option.toString() === value.toString();
@@ -283,7 +282,7 @@ export function CheckboxComponent(props: any) {
     }
     if (e.target.checked === false) {
       const newArray = marketingList.filter(
-        (item) => item !== e.target.labels[0].textContent
+        (item) => item !== e.target.labels[0].textContent,
       );
       setMarketingList(newArray);
       setValue(field.name, newArray);
@@ -333,7 +332,7 @@ export function FormSignaturePad(props: any) {
     if (signaturePadRef.current) {
       const signatureDataUrl = signaturePadRef.current.toDataURL(
         "image/jpeg",
-        1.0
+        1.0,
       );
       // You can now send the signatureDataUrl to your server or use it as needed.
       setValue(field.name, signatureDataUrl, { shouldDirty: true });
