@@ -142,7 +142,7 @@ const FormStepperIo = (props: Props) => {
     
     
     
-    const isStepFilledWithLegitValues = await trigger(
+    const            isStepFilledWithLegitValues = await trigger(
       stagesAll[activeStep.step - 1]
     );
   };
