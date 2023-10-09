@@ -30,14 +30,14 @@ const ReferrerSection: React.FC = () => {
 
       <div className={styles.contactInfo}>
         {referrerContactInfo.map((field) => (
-            <InputComponent
-              key={field.value}
-              defaultValue=""
-              name={field.value}
-              helperText={`Please enter a ${field.key.toLocaleLowerCase()}`}
-              rules={{ required: true }}
-              displayName={field.key}
-            />
+          <InputComponent
+            key={field.value}
+            defaultValue=""
+            name={field.value}
+            helperText={`Please enter a ${field.key.toLocaleLowerCase()}`}
+            rules={{ required: true }}
+            displayName={field.key}
+          />
         ))}
       </div>
       <RadioInputComponent

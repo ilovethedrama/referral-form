@@ -93,7 +93,7 @@ const FormStepperIo = (props: Props) => {
     "referrerAgency",
     "referrerRelationshipType",
     "referrerAddress",
-    "searchPostcode"
+    "searchPostcode",
   ];
 
   const Stage2 = [
@@ -126,7 +126,7 @@ const FormStepperIo = (props: Props) => {
 
   const handleNext = async () => {
     const isStepFilledWithLegitValues = await trigger(
-      stagesAll[activeStep.step]
+      stagesAll[activeStep.step],
     );
     if (isObjectEmpty(errors) && isStepFilledWithLegitValues) {
       const newActiveStep =
@@ -138,8 +138,9 @@ const FormStepperIo = (props: Props) => {
   const handleBack = async () => {
     const newActiveStep = activeStep.step - 1;
     setActiveStep({ step: newActiveStep, isValid: true });
+
     const isStepFilledWithLegitValues = await trigger(
-      stagesAll[activeStep.step - 1]
+      stagesAll[activeStep.step - 1],
     );
   };
 

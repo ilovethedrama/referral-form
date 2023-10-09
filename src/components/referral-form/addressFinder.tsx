@@ -1,10 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  AddressDropdownComponent,
-  InputComponent,
-} from "../input";
+import { AddressDropdownComponent, InputComponent } from "../input";
 import styles from "./addressFinder.module.scss";
 import { Button } from "@material-ui/core";
 import { useFormContext } from "react-hook-form";

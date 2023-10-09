@@ -39,18 +39,18 @@ const AgencySection: React.FC<Props> = ({ multiAgencySupportStatus }) => {
         displayName={hasMultiAgencySupport.displayName}
       />
       {multiAgencySupportStatus === "Yes" && (
-          <div className={styles.contactInfo}>
-            {agencyContactFields.map((field, index) => (
-              <InputComponent
-                key={field.value}
-                defaultValue=""
-                name={field.value}
-                helperText={"dynamic helper text"}
-                rules={{ required: true }}
-                displayName={field.key}
-              />
-            ))}
-          </div>
+        <div className={styles.contactInfo}>
+          {agencyContactFields.map((field, index) => (
+            <InputComponent
+              key={field.value}
+              defaultValue=""
+              name={field.value}
+              helperText={"dynamic helper text"}
+              rules={{ required: true }}
+              displayName={field.key}
+            />
+          ))}
+        </div>
       )}
     </div>
   );

@@ -29,19 +29,18 @@ export type IAddressForm = {
 };
 
 export type IActiveStep = {
-  step: number,
-  isValid: boolean,
-}
+  step: number;
+  isValid: boolean;
+};
 
 export type DropDownProps = {
-  name: string,
-  defaultValue: string,
-  displayName: string,
-  dropdownDetails: DropDownLabel[]
-}
+  name: string;
+  defaultValue: string;
+  displayName: string;
+  dropdownDetails: DropDownLabel[];
+};
 
 export type DropDownLabel = {
-  label: string, 
-  value: string
-
-}
+  label: string;
+  value: string;
+};

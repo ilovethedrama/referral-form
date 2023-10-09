@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { fetchProfile } from "@/components/submitHandler";
 import { useQuery } from "@tanstack/react-query";
 
@@ -22,7 +23,7 @@ export default function Home() {
       <div>
         <h1>Welcome to profile home!</h1>
         <main>
-          <h3>{data?.body?.firstName || 'No record found'}</h3>
+          <h3>{data?.body?.firstName || "No record found"}</h3>
         </main>
       </div>
     </main>
