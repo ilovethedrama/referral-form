@@ -75,7 +75,11 @@ export function RadioInputComponent(props: any) {
       error={listenToRadio === "" && error !== undefined}
       required={true}
     >
-      <FormLabel className={styles.formLabel} id={field.name}>
+      <FormLabel
+        className={styles.formLabel}
+        htmlFor={field.name}
+        id={field.name}
+      >
         {props.radioDetails.title}
       </FormLabel>
       <RadioGroup
@@ -89,9 +93,10 @@ export function RadioInputComponent(props: any) {
         {...props.radioDetails.options.map(({ name }: any) => (
           <FormControlLabel
             {...field}
+            htmlFor={name}
             key={`${props.radioDetails.title}_${name}`}
             value={name}
-            control={<Radio />}
+            control={<Radio id={name} />}
             label={name}
             required={true}
             id={name}
